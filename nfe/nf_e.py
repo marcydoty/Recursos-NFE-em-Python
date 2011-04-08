@@ -93,37 +93,11 @@ class nf_e(object):
             processo.envio.xml
             processo.resposta.xml
             processo.resposta.reason
-            
-        print dir(processo)
-        print dir(processo.envio)
-        print dir(processo.envio.validar)
-        print processo.envio.xml
-        print processo.resposta.xml
-#        print processo.resposta.chNFe.valor
-#        print processo.resposta.protNFe
-#        print dir(processo.resposta.protNFe)
-        print
-        print 'nfe',n.xml
-        print n.infNFe.ide.tpAmb.valor
-        print dir(n)
-        print n.chave
-        print dir(processo.resposta)
-#        print processo.resposta.protNFe
-        print '***', dir(n.infNFe)
-        print '***2', dir(n.infNFe.ide)
-#        processo.resposta.protNFe.infProt.nProt.valor #quando a nota tiver sido processada, desta forma se consegue acessar o protocolo,
-        print '++++++++',dir(processo.resposta.infProt.nProt)
-        print 'prot',processo.resposta.infProt.nProt.valor
-        
-        print 'prot2',processo.resposta.protNFe.infProt.nProt.valor
-#        print '-------',n.nfeProc.prot
-#        print n.nfeProc.protNFe.infProt.nProt.valor
-        print 
+   
         return {'envio':processo.envio.xml,
                 'resposta':processo.resposta.xml,
                 'chave_nfe':n.chave,
                 'protocolo':processo.resposta.protNFe.infProt.nProt.valor,
-#                'protocolo':'12345678910',
                 'reason':processo.resposta.reason
                 }
     
