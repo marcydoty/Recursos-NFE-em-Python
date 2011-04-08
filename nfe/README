@@ -1,0 +1,27 @@
+Visão Geral
+-----------
+
+Biblioteca de interface com o webservice de Nota Fiscal Eletronica,
+da SEFAZ, oficializada pelo Ministerio da Fazendo do Governo do
+Brasil.
+
+A NF-e visa substituir as notas fiscais séries 1 e 1A
+
+Dependências
+------------
+
+- SUDS (https://fedorahosted.org/suds/)
+  - para consumir o webservice SOAP/WSDL
+- lxml
+  - biblioteca de leitura e gravação de arquivos XML, de alta
+    performance e fácil de implementar.
+- libxml2
+  - outra biblioteca XML, mais rápida, escrita em C
+- openssl
+  - abertura e conversão dos certificados
+- XmlSEC
+  - assinatura e validação do XML
+- Pyxmlsec
+  - adaptador Python para a XmlSEC
+
+
