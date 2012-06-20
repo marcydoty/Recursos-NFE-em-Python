@@ -75,4 +75,4 @@ class RetEnviNFe(envinfe_110.RetEnviNFe):
             self.infRec.xml   = arquivo
        
     xml = property(get_xml, set_xml)
-             
+

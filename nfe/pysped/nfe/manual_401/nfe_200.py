@@ -533,7 +533,7 @@ class TagCSTICMS(nfe_110.TagCSTICMS):
 
     def get_valor(self):
         return self._valor_string
-
+    
     valor = property(get_valor, set_valor)
 
 
@@ -547,7 +547,8 @@ class ICMS(nfe_110.ICMS):
         # Valores de controle, para gerar corretamente as tags
         # com os novos campos
         #
-        self.regime_tributario = 1 # Simples Nacional
+        #TODO - VERIFICAR O TRATAMENTO SIMPLES
+        self.regime_tributario = False # Simples Nacional/Tradicional
         self.partilha          = False # Para o grupo ICMSPart
         self.repasse           = False # Para o grupo ICMSST
 
@@ -597,7 +598,6 @@ class ICMS(nfe_110.ICMS):
                 xml += self.vBC.xml
                 xml += self.pICMS.xml
                 xml += self.vICMS.xml
-
             elif self.CST.valor == u'10':
                 if not self.partilha:
                     xml += self.modBC.xml
@@ -786,7 +786,6 @@ class ICMS(nfe_110.ICMS):
             #
             self.partilha = False
             self.repasse  = False
-
             if self._le_noh(u'//det/imposto/ICMS/ICMS00') is not None:
                 self.regime_tributario = 3
                 self.CST.valor = u'00'
@@ -870,7 +869,6 @@ class ICMS(nfe_110.ICMS):
                 self.motDesICMS.xml  = arquivo
                 self.vBCSTDest.xml   = arquivo
                 self.vICMSSTDest.xml = arquivo
-
     xml = property(get_xml, set_xml)
 
 
@@ -1113,6 +1111,7 @@ class Prod(nfe_110.Prod):
             self.vFrete.xml   = arquivo
             self.vSeg.xml     = arquivo
             self.vDesc.xml    = arquivo
+            self.vOutro.xml   = arquivo
 
             #
             # Técnica para leitura de tags múltiplas
@@ -1143,14 +1142,19 @@ class Det(nfe_110.Det):
         super(Det, self).__init__()
         self.prod      = Prod()
         self.imposto   = Imposto()
-        print 'Imposto',self.imposto
 
     def cst_formatado(self):
-        if self.imposto.regime_tributario != 1:
-            super(Det, self).cst_formatado()
+        #TODO : COLOCAR INFORMAÇÃO PARA SIMPLES 
+#        if self.imposto.regime_tributario != 1:
+#            super(Det, self).cst_formatado()
+#        formatado = unicode(self.imposto.ICMS.orig.valor).zfill(1)
+#        formatado += unicode(self.imposto.ICMS.CSOSN.valor).zfill(3)
+        #####################################
         
+        super(Det, self).cst_formatado()
         formatado = unicode(self.imposto.ICMS.orig.valor).zfill(1)
-        formatado += unicode(self.imposto.ICMS.CSOSN.valor).zfill(3)
+        formatado += unicode(self.imposto.ICMS.CST.valor).zfill(2)
+
         return formatado
 
 
@@ -1786,4 +1790,5 @@ class NFe(nfe_110.NFe):
 
         chave += unicode(self.infNFe.ide.cNF.valor).strip().rjust(8, u'0')
         chave += unicode(self.infNFe.ide.cDV.valor).strip().rjust(1, u'0')
+        
         self.chave = chave

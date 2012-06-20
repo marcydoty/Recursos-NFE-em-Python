@@ -1,6 +1,6 @@
 
 
 
-from processador_nfe import ProcessadorNFe, Certificado
+from processador_nfe import ProcessadorNFe, DANFE, Certificado
 
 

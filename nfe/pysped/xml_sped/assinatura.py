@@ -16,8 +16,8 @@ class Signature(XMLNFe):
         super(Signature, self).__init__()
         self.URI = u''
         self.DigestValue = u''
-        self.SignatureValue = u''
-        self.X509Certificate = u''
+        self.SignatureValue = u'' 
+        self.X509Certificate = u'' 
         self.caminho_esquema = os.path.join(DIRNAME, u'schema/')
         self.arquivo_esquema = u'xmldsig-core-schema_v1.01.xsd'
 

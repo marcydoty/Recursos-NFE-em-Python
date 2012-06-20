@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-ESQUEMA_ATUAL = u'pl_006g'
+ESQUEMA_ATUAL = u'pl_006j'
 
 
 #
