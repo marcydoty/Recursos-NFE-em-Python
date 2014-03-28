@@ -581,10 +581,10 @@ class FaturaAVistaRetrato(BandaDANFE):
         lbl, txt = self.inclui_texto(nome='fat_texto', titulo='', texto=u'PAGAMENTO À VISTA', top=0.42*cm, left=0*cm, width=19.4*cm)
 #        lbl.borders['right'] = {'top': 1.0, 'right': 1.0, 'bottom': 1.0, 'left': 1.0}
 
-        lbl, fld = self.inclui_campo(nome='fat_numero', titulo=u'NÚMERO DA FATURA', conteudo=u'NFe.infNFe.cobr.fat.nFat.valor', top=0.42*cm, left=3.7*cm, width=9.7*cm)
-        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'VALOR ORIGINAL', conteudo=u'NFe.infNFe.cobr.fat.vOrig.formato_danfe', top=0.42*cm, left=13.4*cm, width=2*cm)
-        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'DESCONTO', conteudo=u'NFe.infNFe.cobr.fat.vDesc.formato_danfe', top=0.42*cm, left=15.4*cm, width=2*cm)
-        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'VALOR LÍQUIDO', conteudo=u'NFe.infNFe.cobr.fat.vLiq.formato_danfe', top=0.42*cm, left=17.4*cm, width=2*cm, margem_direita=True)
+        lbl, fld = self.inclui_campo(nome='fat_numero', titulo=u'NÚMERO DA FATURA', conteudo=u'NFe.infNFe.cobr.fat.nFat.valor', top=0.42*cm, left=7.7*cm, width=7.7*cm)
+#        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'VALOR ORIGINAL', conteudo=u'NFe.infNFe.cobr.fat.vOrig.formato_danfe', top=0.42*cm, left=13.4*cm, width=2*cm)
+#        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'DESCONTO', conteudo=u'NFe.infNFe.cobr.fat.vDesc.formato_danfe', top=0.42*cm, left=15.4*cm, width=2*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'VALOR LÍQUIDO', conteudo=u'NFe.infNFe.cobr.fat.vLiq.formato_danfe', top=0.42*cm, left=15.4*cm, width=4*cm, margem_direita=True)
 
         self.height = 1.12*cm
 
@@ -598,10 +598,10 @@ class FaturaAPrazoRetrato(BandaDANFE):
         lbl, txt = self.inclui_texto(nome='fat_texto', titulo='', texto=u'PAGAMENTO A PRAZO', top=0.42*cm, left=0*cm, width=19.4*cm)
         lbl.borders['right'] = {'top': 1.0, 'right': 1.0, 'bottom': 1.0, 'left': 1.0}
 
-        lbl, fld = self.inclui_campo(nome='fat_numero', titulo=u'NÚMERO DA FATURA', conteudo=u'NFe.infNFe.cobr.fat.nFat.valor', top=0.42*cm, left=3.7*cm, width=9.7*cm)
-        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'VALOR ORIGINAL', conteudo=u'NFe.infNFe.cobr.fat.vOrig.formato_danfe', top=0.42*cm, left=13.4*cm, width=2*cm)
-        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'DESCONTO', conteudo=u'NFe.infNFe.cobr.fat.vDesc.formato_danfe', top=0.42*cm, left=15.4*cm, width=2*cm)
-        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'VALOR LÍQUIDO', conteudo=u'NFe.infNFe.cobr.fat.vLiq.formato_danfe', top=0.42*cm, left=17.4*cm, width=2*cm, margem_direita=True)
+        lbl, fld = self.inclui_campo(nome='fat_numero', titulo=u'NÚMERO DA FATURA', conteudo=u'NFe.infNFe.cobr.fat.nFat.valor', top=0.42*cm, left=7.7*cm, width=7.7*cm)
+#        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'VALOR ORIGINAL', conteudo=u'NFe.infNFe.cobr.fat.vOrig.formato_danfe', top=0.42*cm, left=13.4*cm, width=2*cm)
+#        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'DESCONTO', conteudo=u'NFe.infNFe.cobr.fat.vDesc.formato_danfe', top=0.42*cm, left=15.4*cm, width=2*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'VALOR LÍQUIDO', conteudo=u'NFe.infNFe.cobr.fat.vLiq.formato_danfe', top=0.42*cm, left=15.4*cm, width=4*cm, margem_direita=True)
 
         self.height = 1.12*cm
 
@@ -715,9 +715,11 @@ class CabProdutoRetrato(BandaDANFE):
         self.elements = []
         self.inclui_descritivo(nome='cabprod', titulo=u'DADOS DOS PRODUTOS/SERVIÇOS', top=0*cm, left=0*cm, width=19.4*cm)
 
-        lbl = self.inclui_descritivo_produto(nome='', titulo='CÓDIGO DO PRODUTO', top=0.42*cm, left=0*cm, width=2.6*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='CÓDIGO DO PRODUTO', top=0.42*cm, left=0*cm, width=2*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='DESCRIÇÃO DO PRODUTO/SERVIÇO', top=0.42*cm, left=2.6*cm, width=5.26*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='DESCRIÇÃO DO PRODUTO/SERVIÇO', top=0.42*cm, left=2*cm, width=4.31*cm)
+        lbl.padding_top = 0.15*cm
+        lbl = self.inclui_descritivo_produto(nome='', titulo='CÓDIGO DE BARRAS', top=0.42*cm, left=6.3*cm, width=1.57*cm)
         lbl.padding_top = 0.15*cm
         lbl = self.inclui_descritivo_produto(nome='', titulo='NCM/SH', top=0.42*cm, left=7.86*cm, width=1*cm)
         lbl.padding_top = 0.15*cm
@@ -766,8 +768,9 @@ class DetProdutoRetrato(BandaDANFE):
         #txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.24*cm, width=0.58*cm)
         #txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.82*cm, width=0.58*cm, margem_direita=True)
 
-        txt = self.inclui_campo_produto(nome=u'prod_codigo', conteudo=u'prod.cProd.valor', top=0*cm, left=0*cm, width=2.6*cm)
-        txt = self.inclui_campo_produto(nome=u'prod_descricaco', conteudo=u'descricao_produto_formatada', top=0*cm, left=2.6*cm, width=5.26*cm)
+        txt = self.inclui_campo_produto(nome=u'prod_codigo', conteudo=u'prod.cProd.valor', top=0*cm, left=0*cm, width=2*cm)
+        txt = self.inclui_campo_produto(nome=u'prod_descricaco', conteudo=u'descricao_produto_formatada', top=0*cm, left=2*cm, width=4.31*cm)
+        txt = self.inclui_campo_centralizado_produto(nome=u'prod_cean', conteudo=u'prod.cEAN.valor', top=0*cm, left=6.3*cm, width=1.57*cm)
         txt = self.inclui_campo_centralizado_produto(nome=u'prod_ncm', conteudo=u'prod.NCM.valor', top=0*cm, left=7.86*cm, width=1*cm)
         txt = self.inclui_campo_centralizado_produto(nome='prod_cst', conteudo='cst_formatado', top=0*cm, left=8.86*cm, width=0.44*cm)
         txt = self.inclui_campo_centralizado_produto(nome=u'prod_cfop', conteudo=u'prod.CFOP.valor', top=0*cm, left=9.3*cm, width=0.54*cm)
@@ -792,7 +795,7 @@ class ISSRetrato(BandaDANFE):
 
         # Cálculo do ISS
         self.inclui_descritivo(nome='iss', titulo=u'CÁLCULO DO ISSQN', top=0*cm, left=0*cm, width=19.4*cm)
-        lbl, fld = self.inclui_campo(nome='iss_im', titulo=u'INSCRIÇÃO MUNICIPAL', conteudo=u'NFe.infNFe.emit.IM.valor', top=0.42*cm, left=0*cm, width=4.85*cm)
+        lbl, fld = self.inclui_campo(nome='iss_im', titulo=u'INSCRIÇÃO MUNICIPAL', conteudo=u'NFe.infNFe.ide.cMunFG.valor', top=0.42*cm, left=0*cm, width=4.85*cm)
         lbl, fld = self.inclui_campo_numerico(nome='iss_vr_servico', titulo=u'VALOR TOTAL DOS SERVIÇOS', conteudo=u'NFe.infNFe.total.ISSQNTot.vServ.formato_danfe', top=0.42*cm, left=4.85*cm, width=4.85*cm)
         lbl, fld = self.inclui_campo_numerico(nome='iss_bc', titulo=u'BASE DE CÁLCULO DO ISSQN', conteudo=u'NFe.infNFe.total.ISSQNTot.vBC.formato_danfe', top=0.42*cm, left=9.7*cm, width=4.85*cm)
         lbl, fld = self.inclui_campo_numerico(nome='iss_vr_iss', titulo=u'VALOR DO ISSQN', conteudo=u'NFe.infNFe.total.ISSQNTot.vISS.formato_danfe', top=0.42*cm, left=14.55*cm, width=4.85*cm, margem_direita=True)

@@ -26,19 +26,24 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-from datetime import datetime, date, time
+from datetime import datetime, date, time, tzinfo
 from decimal import Decimal
 import locale
-
-
+import subprocess
+import os
+import unicodedata
+import re
+import pytz
 NAMESPACE_NFE = u'http://www.portalfiscal.inf.br/nfe'
 NAMESPACE_SIG = u'http://www.w3.org/2000/09/xmldsig#'
 ABERTURA = u'<?xml version="1.0" encoding="utf-8"?>'
+
 
 CAMINHO_ESQUEMA_110 = u'schema/pl_005d/'
 CAMINHO_ESQUEMA_200 = u'schema/pl_006g/'
 #CAMINHO_ESQUEMA_200 = u'schema/006g/'
 
+DIRNAME = os.path.dirname(__file__)
 
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
@@ -294,6 +299,89 @@ class TagCaracter(NohXML):
 
     text = property(get_text)
 
+    def get_txt(self):
+        if self.obrigatorio:
+            return self._valor_string
+
+        if self.valor:
+            return self._valor_string
+
+        return ''
+
+    txt = property(get_txt)
+
+
+class TagBoolean(TagCaracter):
+    def __init__(self, **kwargs):
+        super(TagBoolean, self).__init__(**kwargs)
+        self._valor_boolean = None
+        # Codigo para dinamizar a criacao de instancias de entidade,
+        # aplicando os valores dos atributos na instanciacao
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
+        if kwargs.has_key('valor'):
+            self.valor = kwargs['valor']
+
+
+    def _testa_obrigatorio(self, valor):
+        # No caso da tag booleana, False deve ser tratado como preenchido
+        if self.obrigatorio and (valor is None):
+            return ErroObrigatorio(self.codigo, self.nome, self.propriedade)
+
+    def _valida(self, valor):
+        self.alertas = []
+
+        if self._testa_obrigatorio(valor):
+            self.alertas.append(self._testa_obrigatorio(valor))
+
+        return self.alertas == []
+
+    def set_valor(self, novo_valor):
+        if isinstance(novo_valor, basestring):
+            if novo_valor.lower() == 'true':
+                novo_valor = True
+            elif novo_valor.lower() == 'false':
+                novo_valor = False
+            else:
+                novo_valor = None
+
+        if isinstance(novo_valor, bool) and self._valida(novo_valor):
+            self._valor_boolean = novo_valor
+
+            if novo_valor == None:
+                self._valor_string = ''
+            elif novo_valor:
+                self._valor_string = 'true'
+            else:
+                self._valor_string = 'false'
+        else:
+            self._valor_boolean = None
+            self._valor_string = ''
+
+    def get_valor(self):
+        return self._valor_boolean
+
+    valor = property(get_valor, set_valor)
+
+    def __unicode__(self):
+        if (not self.obrigatorio) and (self.valor == None):
+            texto = ''
+        else:
+            texto = '<%s' % self.nome
+
+            if self.namespace:
+                texto += ' xmlns="%s"' % self.namespace
+
+            if self.propriedade:
+                texto += ' %s="%s">' % (self.propriedade, self._valor_string)
+            elif not self.valor == None:
+                texto += '>%s</%s>' % (self._valor_string, self.nome)
+            else:
+                texto += ' />'
+
+        return texto
+
 
 class TagData(TagCaracter):
     def __init__(self, **kwargs):
@@ -379,7 +467,8 @@ class TagDataHora(TagData):
     def set_valor(self, novo_valor):
         if isinstance(novo_valor, basestring):
             if novo_valor:
-                novo_valor = datetime.strptime(novo_valor, u'%Y-%m-%dT%H:%M:%S')
+                if not len(novo_valor) > 19:
+                    novo_valor = datetime.strptime(novo_valor, u'%Y-%m-%dT%H:%M:%S')
             else:
                 novo_valor = None
 
@@ -405,6 +494,103 @@ class TagDataHora(TagData):
             return u''
         else:
             return self._valor_data.strftime(u'%d/%m/%Y %H:%M:%S')
+
+
+class TagDataHoraUTC(TagData):
+    def __init__(self, **kwargs):
+        super(TagDataHoraUTC, self).__init__(**kwargs)
+        #
+        # Expressão de validação do formato (vinda do arquivo leiauteSRE_V1.00.xsd
+        # Alterada para tornar a informação do fuso horário opcional
+        #
+        self._validacao = re.compile(r'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1\d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))T(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d(-0[1-4]:00)?')
+        self._valida_fuso = re.compile(r'.*-0[1-4]:00$')
+        self._brasilia = pytz.timezone('America/Sao_Paulo')
+        self.fuso_horario = 'America/Sao_Paulo'
+
+    def set_valor(self, novo_valor):
+        if isinstance(novo_valor, basestring):
+            if self._validacao.match(novo_valor):
+                if self._valida_fuso.match(novo_valor):
+                    #
+                    # Extrai e determina qual o fuso horário informado
+                    #
+                    self.fuso_horario = novo_valor[19:]
+                    novo_valor = novo_valor[:19]
+
+                #
+                # Converte a data sem fuso horário para o fuso horário atual
+                # Isso é necessário pois a função strptime ignora a informação
+                # do fuso horário na string de entrada
+                #
+                novo_valor = self.fuso_horario.localize(datetime.strptime(novo_valor, '%Y-%m-%dT%H:%M:%S'))
+            else:
+                novo_valor = None
+
+        if isinstance(novo_valor, datetime) and self._valida(novo_valor):
+            self._valor_data = novo_valor
+            self._valor_data = self._valor_data.replace(microsecond=0)
+            try:
+                self._valor_data = self.fuso_horario.localize(self._valor_data)
+            except:
+                pass
+            # Cuidado!!!
+            # Aqui não dá pra usar a função strftime pois em alguns
+            # casos a data retornada é 01/01/0001 00:00:00
+            # e a função strftime só aceita data com anos a partir de 1900
+            #self._valor_string = '%04d-%02d-%02dT%02d:%02d:%02d' % (self._valor_data.year, self._valor_data.month, self._valor_data.day,
+            #    self._valor_data.hour, self._valor_data.minute, self._valor_data.second)
+
+            self._valor_string = self._valor_data.isoformat()
+        else:
+            self._valor_data = None
+            self._valor_string = ''
+
+    def get_valor(self):
+        return self._valor_data
+
+    valor = property(get_valor, set_valor)
+
+    def set_fuso_horaro(self, novo_valor):
+        if novo_valor in pytz.country_timezones['br']:
+            self._fuso_horario = pytz.timezone(novo_valor)
+
+        #
+        # Nos valores abaixo, não entendi ainda até agora, mas para o resultado
+        # correto é preciso usar GMT+ (mais), não (menos) como seria de se
+        # esperar...
+        #
+        elif novo_valor == '-04:00' or novo_valor == '-0400':
+            self._fuso_horario = pytz.timezone('Etc/GMT+4')
+        elif novo_valor == '-03:00' or novo_valor == '-0300':
+            self._fuso_horario = pytz.timezone('Etc/GMT+3')
+        elif novo_valor == '-02:00' or novo_valor == '-0200':
+            self._fuso_horario = pytz.timezone('Etc/GMT+2')
+        elif novo_valor == '-01:00' or novo_valor == '-0100':
+            self._fuso_horario = pytz.timezone('Etc/GMT+1')
+
+    def get_fuso_horario(self):
+        return self._fuso_horario
+
+    fuso_horario = property(get_fuso_horario, set_fuso_horaro)
+
+    def formato_danfe(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            valor = self._brasilia.normalize(self._valor_data).strftime('%d/%m/%Y %H:%M:%S %Z (%z)')
+            #
+            # Troca as siglas:
+            # BRT - Brazilian Time -> HOB - Horário Oficial do Brasil
+            # BRST - Brazilian Summer Time -> HVOB - Horário de Verão Oficial do Brasil
+            #
+            valor = valor.replace('(-0100)', '(-01:00)')
+            valor = valor.replace('(-0200)', '(-02:00)')
+            valor = valor.replace('(-0300)', '(-03:00)')
+            valor = valor.replace('(-0400)', '(-04:00)')
+            valor = valor.replace('BRT', 'HOB')
+            valor = valor.replace('BRST', 'HVOB')
+            return valor
 
 
 class TagInteiro(TagCaracter):
@@ -594,18 +780,23 @@ class XMLNFe(NohXML):
         xml = tira_abertura(self.xml).encode(u'utf-8')
 
         esquema = etree.XMLSchema(etree.parse(arquivo_esquema))
-#        print u'\nSCHEMA:', arquivo_esquema
-        #esquema.assertValid(etree.fromstring(xml))
+
         if not esquema.validate(etree.fromstring(xml)):
-#            for nr, line in enumerate(etree.tostring(etree.fromstring(xml),
-#                                                     encoding="utf-8",
-#                                                     pretty_print=True
-#                                                    ).split('\n')):
-#                print nr+1, line
-                #raise AssertionError(unicode(schema.error_log))
-            print esquema.error_log.last_error
-            #import pdb; pdb.set_trace()
-            raise Exception(u'NFe nao validou no esquema "%s"' % self.arquivo_esquema)
+            print 'ESQUEMA',arquivo_esquema
+            for nr, line in enumerate(etree.tostring(etree.fromstring(xml),
+                    encoding="utf-8",
+                    pretty_print=True
+                ).split('\n')):
+                    print nr+1, line
+            #tratamento feito provisoriamente para uso com OpenERP
+            xml_arquivo = open('/tmp/xml.txt', 'wb').write(xml)
+            valida_esquema_arquivo = open('/tmp/arquivo_esquema.txt', 'wb').write(arquivo_esquema)
+            subprocess.call(["python", DIRNAME + '/valida.py'])
+            erro_log = open('/tmp/erro_log_nfe.txt', 'r').read()
+            os.remove('/tmp/xml.txt')
+            os.remove('/tmp/arquivo_esquema.txt')
+            os.remove('/tmp/erro_log_nfe.txt')
+            raise Exception(u'NFe nao validou no esquema "%s"' % erro_log)
 
         return esquema.error_log
 
@@ -654,19 +845,27 @@ def por_acentos(texto):
     texto = texto.replace(u'&quot;', u'"')
     texto = texto.replace(u'&gt;'   , u'>')
     texto = texto.replace(u'&lt;'   , u'<')
-    texto = texto.replace(u'&amp;' , u'&')
+    texto = texto.replace(u'&amp;', u'&')
+    texto = texto.replace(u'&APOS;', u"'")
+    texto = texto.replace(u'&QUOT;', u'"')
+    texto = texto.replace(u'&GT;', u'>')
+    texto = texto.replace(u'&LT;', u'<')
+    texto = texto.replace(u'&AMP;', u'&')
 
     return texto
 
 def tira_abertura(texto):
-    aberturas = (u'<?xml version="1.0" encoding="utf-8"?>',
-        u'<?xml version="1.0" encoding="utf-8" ?>',
-        u'<?xml version="1.0" encoding="UTF-8"?>',
-        u'<?xml version="1.0" encoding="UTF-8" ?>')
+#    aberturas = (u'<?xml version="1.0" encoding="utf-8"?>',
+#        u'<?xml version="1.0" encoding="utf-8" ?>',
+#        u'<?xml version="1.0" encoding="UTF-8"?>',
+#        u'<?xml version="1.0" encoding="UTF-8" ?>')
+#
+#    for a in aberturas:
+#        texto = texto.replace(a,  u'')
 
-    for a in aberturas:
-        texto = texto.replace(a,  u'')
-
+    if '?>' in texto:
+        texto = texto.split('?>')[1:]
+    texto = ''.join(texto)
     return texto
 
 def _tipo_para_string(valor, tipo, obrigatorio, dec_min):
@@ -725,3 +924,13 @@ def formata_datahora(valor, tipo):
         valor = u'%04d-%02d-%02dT%02d:%02d:%02d' % (valor.year, valor.month, valor.day, valor.hour, valor.minute, valor.second)
 
     return valor
+
+def somente_ascii(funcao):
+    '''
+    Usado como decorator para a nota fiscal eletrônica de servicos
+    '''
+    def converter_para_ascii_puro(*args, **kwargs):
+        return unicodedata.normalize(b'NFKD', funcao(*args, **kwargs)).encode('ascii', 'ignore')
+
+    return converter_para_ascii_puro
+

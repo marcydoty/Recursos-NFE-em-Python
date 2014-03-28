@@ -143,7 +143,7 @@
 			<xs:documentation>Tipo Versão do leiaute de Cancelamento de NF-e - 2.00</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:token">
-			<xs:pattern value="2\.00"/>
+			<xs:pattern value="2\.01"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="TVerConsSitNFe">
@@ -151,7 +151,7 @@
 			<xs:documentation>Tipo Versão do Leiaute da Cosulta situação NF-e - 2.00</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:token">
-			<xs:pattern value="2\.00"/>
+			<xs:pattern value="2\.01"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

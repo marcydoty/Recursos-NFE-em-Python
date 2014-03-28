@@ -22,9 +22,9 @@ from base import *
 
 
 class DANFEPaisagem(Report):
-#    title = 'DANFE - Documento Auxiliar da Nota Fiscal Eletrônica'
-#    author = 'TaŭgaRS Haveno'
-#    print_if_empty = True
+    title = 'DANFE - Documento Auxiliar da Nota Fiscal Eletrônica'
+    author = 'Taŭga Haveno'
+    print_if_empty = True
 #
 #    page_size = PAISAGEM
 #    margin_top = MARGEM_SUPERIOR
@@ -32,34 +32,24 @@ class DANFEPaisagem(Report):
 #    margin_left = MARGEM_ESQUERDA
 #    margin_right = MARGEM_DIREITA
 
+    page_size = PAISAGEM
+    margin_top = MARGEM_SUPERIOR
+    margin_bottom = MARGEM_INFERIOR
+    margin_left = MARGEM_ESQUERDA
+    margin_right = MARGEM_DIREITA
+
     def __init__(self, *args, **kargs):
         super(DANFEPaisagem, self).__init__(*args, **kargs)
         self.title = 'DANFE - Documento Auxiliar da Nota Fiscal Eletrônica'
         self.print_if_empty = True
         self.additional_fonts = FONTES_ADICIONAIS
 
-        self.page_size = RETRATO
-        self.margin_top = MARGEM_SUPERIOR
-        self.margin_bottom = MARGEM_INFERIOR
-        self.margin_left = MARGEM_ESQUERDA
-        self.margin_right = MARGEM_DIREITA
+    def on_new_page(self, generator):
+        if generator._current_page_number <> 1:
+            self.band_page_footer = None
 
-        # Bandas e observações
-        self.canhoto          = CanhotoPaisagem()
-        self.remetente        = RemetentePaisagem()
-        self.destinatario     = DestinatarioPaisagem()
-        self.local_retirada   = LocalRetiradaPaisagem()
-        self.local_entrega    = LocalEntregaPaisagem()
-        self.fatura_a_vista   = FaturaAVistaPaisagem()
-#        self.fatura_a_prazo   = FaturaAPrazoPaisagem()
-#        self.duplicatas       = DuplicatasPaisagem()
-        self.calculo_imposto  = CalculoImpostoPaisagem()
-        self.transporte       = TransportePaisagem()
-        self.cab_produto      = CabProdutoPaisagem()
-        self.det_produto      = DetProdutoPaisagem()
-        self.iss              = ISSPaisagem()
-        self.dados_adicionais = DadosAdicionaisPaisagem()
-#        self.rodape_final     = RodapeFinalPaisagem()
+            self.band_page_header = RemetentePaisagem()
+            self.band_page_header.campo_variavel_normal()
 
     def do_on_new_page(self, page, page_number, generator):
         if generator._current_page_number <> 1:
@@ -67,25 +57,9 @@ class DANFEPaisagem(Report):
 
             self.band_page_header = self.remetente
             self.band_page_header.child_bands = []
-            self.band_page_header.child_bands.append(self.cab_produto)
-
-    def format_date(self, data, formato):
-        return  data.strftime(formato.encode('utf-8')).decode('utf-8')
+            self.band_page_header.child_bands.append(CabProdutoPaisagem())
 
 
-    class ObsImpressao(SystemField):
-        expression = u'DANFE gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
-
-        def __init__(self):
-            self.name = 'obs_impressao'
-            self.top = 0*cm
-            self.left = 0.1*cm
-            self.width = 19.4*cm
-            self.height = 0.2*cm
-            self.style = DADO_PRODUTO
-            self.borders = {'bottom': 1.0}
-
-        
 
 class CanhotoPaisagem(BandaDANFE):
     def __init__(self):

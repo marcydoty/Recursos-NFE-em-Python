@@ -340,7 +340,7 @@ class BandaDANFE(ReportBand):
             txt.height = height
         else:
             txt.height = 0.28*cm
-        
+
         self.elements.append(txt)
 
         return txt

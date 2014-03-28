@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-ESQUEMA_ATUAL = u'pl_006j'
+ESQUEMA_ATUAL = u'pl_006s'
 
 
 #
@@ -50,6 +50,20 @@ from cancnfe_200 import RetCancNFe as RetCancNFe_200
 from cancnfe_200 import ProcCancNFe as ProcCancNFe_200
 
 #
+# Cancelamento de NF-e por EVENTO
+
+from cancnfe_evento import EnvEvento as EnvEvento_200
+from cancnfe_evento import RetEnvEvento as RetEnvEvento_200
+from cancnfe_evento import ProcEventoNFe as ProcEventoNFe_200
+
+#
+# Carta de Correção
+
+from carta_correcao import EnvEvento as EnvEventoCCe_200
+from carta_correcao import RetEnvEvento as RetEnvEventoCCe_200
+from carta_correcao import ProcEventoNFe as ProcEventoNFeCCe_200
+
+#
 # Inutilização de NF-e
 #
 from inutnfe_200 import InutNFe as InutNFe_200
@@ -71,5 +85,6 @@ from consstatserv_200 import RetConsStatServ as RetConsStatServ_200
 #
 # Consulta cadastro
 #
-#from conscad_101 import ConsCad as ConsCad_101
-#from conscad_101 import RetConsCad as RetConsCad_101
+from conscad_200 import ConsCad as ConsCad_200
+from conscad_200 import RetConsCad as RetConsCad_200
+

@@ -188,7 +188,7 @@ class COFINS(XMLNFe):
 
         self.CST      = TagCSTCOFINS()
         self.CST.grupo_cofins = self
-        self.CST.valor = u'07'
+#        self.CST.valor = u'07'
 
     def get_xml(self):
         #
@@ -397,7 +397,7 @@ class PIS(XMLNFe):
 
         self.CST      = TagCSTPIS()
         self.CST.grupo_pis = self
-        self.CST.valor = u'07'
+#        self.CST.valor = u'07'
 
     def get_xml(self):
         #
@@ -584,7 +584,7 @@ class IPI(XMLNFe):
 
         self.CST      = TagCSTIPI()
         self.CST.grupo_ipi = self
-        self.CST.valor = u'52'
+#        self.CST.valor = u'52'
 
     def get_xml(self):
         if not ((self.CST.valor in (u'00', u'49', u'50', u'99')) or
@@ -818,7 +818,7 @@ class ICMS(XMLNFe):
 
         self.CST      = TagCSTICMS()
         self.CST.grupo_icms = self
-        self.CST.valor = u'40'
+#        self.CST.valor = u'40'
 
     def get_xml(self):
         #
@@ -853,8 +853,8 @@ class ICMS(XMLNFe):
 
         elif self.CST.valor == u'20':
             xml += self.modBC.xml
-            xml += self.vBC.xml
             xml += self.pRedBC.xml
+            xml += self.vBC.xml
             xml += self.pICMS.xml
             xml += self.vICMS.xml
 
@@ -886,8 +886,8 @@ class ICMS(XMLNFe):
 
         elif self.CST.valor == u'70':
             xml += self.modBC.xml
-            xml += self.vBC.xml
             xml += self.pRedBC.xml
+            xml += self.vBC.xml
             xml += self.pICMS.xml
             xml += self.vICMS.xml
             xml += self.modBCST.xml
@@ -1124,6 +1124,7 @@ class Comb(XMLNFe):
         self.cProdANP  = TagInteiro(nome=u'cProdANP', codigo=u'L102', tamanho=[9,  9, 9],                     raiz=u'//det/prod/comb')
         self.CODIF     = TagInteiro(nome=u'CODIF'   , codigo=u'L103', tamanho=[0, 21]   ,                     raiz=u'//det/prod/comb', obrigatorio=False)
         self.qTemp     = TagDecimal(nome=u'qTemp'   , codigo=u'L104', tamanho=[1, 16, 1], decimais=[0, 4, 4], raiz=u'//det/prod/comb', obrigatorio=False)
+        self.UFCons    = TagCaracter(nome=u'UFCons'   , codigo=u'L120', tamanho=[2,  2], raiz=u'//det/prod/comb')
         self.CIDE      = CIDE()
         self.ICMSComb  = ICMSComb()
         self.ICMSInter = ICMSInter()
@@ -1138,6 +1139,7 @@ class Comb(XMLNFe):
         xml += self.cProdANP.xml
         xml += self.CODIF.xml
         xml += self.qTemp.xml
+        xml += self.UFCons.xml
         xml += self.CIDE.xml
         xml += self.ICMSComb.xml
         xml += self.ICMSInter.xml
@@ -1150,6 +1152,7 @@ class Comb(XMLNFe):
             self.cProdANP.xml  = arquivo
             self.CODIF.xml     = arquivo
             self.qTemp.xml     = arquivo
+            self.UFCons.xml    = arquivo
             self.CIDE.xml      = arquivo
             self.ICMSComb.xml  = arquivo
             self.ICMSInter.xml = arquivo
@@ -1864,7 +1867,7 @@ class Vol(XMLNFe):
         self.lacres = []
 
     def get_xml(self):
-        if not (self.qVol.valor or self.esp.valor or self.marca.valor or self.nVol.valor or self.pesoL.valor or self.pesoB.valor or len(self.lacres.nLacre)):
+        if not (self.qVol.valor or self.esp.valor or self.marca.valor or self.nVol.valor or self.pesoL.valor or self.pesoB.valor or len(self.lacres)):
             return u''
 
         xml = XMLNFe.get_xml(self)
@@ -2171,7 +2174,7 @@ class ICMSTot(XMLNFe):
         self.vCOFINS = TagDecimal(nome=u'vCOFINS', codigo=u'W14', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz=u'//NFe/infNFe/total/ICMSTot')
         self.vOutro  = TagDecimal(nome=u'vOutro' , codigo=u'W15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz=u'//NFe/infNFe/total/ICMSTot')
         self.vNF     = TagDecimal(nome=u'vNF'    , codigo=u'W16', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz=u'//NFe/infNFe/total/ICMSTot')
-
+        self.vTotTrib = TagDecimal(nome=u'vTotTrib'    , codigo=u'W16a', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz=u'//NFe/infNFe/total/ICMSTot', obrigatorio=False)
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += u'<ICMSTot>'
@@ -2189,6 +2192,7 @@ class ICMSTot(XMLNFe):
         xml += self.vCOFINS.xml
         xml += self.vOutro.xml
         xml += self.vNF.xml
+        xml += self.vTotTrib.xml
         xml += u'</ICMSTot>'
         return xml
 
@@ -2208,6 +2212,7 @@ class ICMSTot(XMLNFe):
             self.vCOFINS.xml = arquivo
             self.vOutro.xml  = arquivo
             self.vNF.xml     = arquivo
+            self.vTotTrib.xml = arquivo
 
     xml = property(get_xml, set_xml)
 
@@ -2596,7 +2601,7 @@ class RefNF(XMLNFe):
 class NFRef(XMLNFe):
     def __init__(self):
         super(NFRef, self).__init__()
-        self.refNFe = TagCaracter(nome=u'refNFe', codigo=u'B13', tamanho=[44, 44], raiz=u'//NFRef', obrigatorio=False)
+        self.refNFe = TagCaracter(nome=u'refNFe', codigo=u'B13', tamanho=[44, 44], raiz=u'//NFref', obrigatorio=True)
         self.refNF  = RefNF()
 
     def get_xml(self):
@@ -2614,7 +2619,7 @@ class NFRef(XMLNFe):
         xml += u'</NFref>'
         return xml
 
-    def set_xml(self):
+    def set_xml(self,arquivo):
         if self._le_xml(arquivo):
             self.refNFe.xml = arquivo
             self.refNF.xml  = arquivo
@@ -2644,7 +2649,7 @@ class Ide(XMLNFe):
         self.finNFe  = TagInteiro(nome=u'finNFe'  , codigo=u'B25', tamanho=[ 1,  1, 1], raiz=u'//NFe/infNFe/ide', valor=1)
         self.procEmi = TagInteiro(nome=u'procEmi' , codigo=u'B26', tamanho=[ 1,  1, 1], raiz=u'//NFe/infNFe/ide')
         self.verProc = TagCaracter(nome=u'verProc', codigo=u'B27', tamanho=[ 1, 20]   , raiz=u'//NFe/infNFe/ide')
-        self.hSaiEnt = TagHora(nome=u'hSaiEnt'    , codigo=u''   ,                      raiz=u'//NFe/infNFe/ide', obrigatorio=False)
+        self.hSaiEnt = TagHora(nome=u'hSaiEnt'    , codigo=u'B10a'   ,                      raiz=u'//NFe/infNFe/ide', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -2658,6 +2663,7 @@ class Ide(XMLNFe):
         xml += self.nNF.xml
         xml += self.dEmi.xml
         xml += self.dSaiEnt.xml
+        xml += self.hSaiEnt.xml
         xml += self.tpNF.xml
         xml += self.cMunFG.xml
 
@@ -2685,6 +2691,7 @@ class Ide(XMLNFe):
             self.nNF.xml     = arquivo
             self.dEmi.xml    = arquivo
             self.dSaiEnt.xml = arquivo
+            self.hSaiEnt.xml = arquivo
             self.tpNF.xml    = arquivo
             self.cMunFG.xml  = arquivo
 
@@ -2694,7 +2701,7 @@ class Ide(XMLNFe):
             # "reenraizadas" (propriedade raiz) para poderem ser
             # lidas corretamente
             #
-            self.NFRef = self.le_grupo('//NFe/infNFe/ide/NFref', NFRef)
+            self.NFref = self.le_grupo('//NFe/infNFe/ide/NFref', NFRef)
 
             self.tpImp.xml   = arquivo
             self.tpEmis.xml  = arquivo
@@ -2849,22 +2856,25 @@ class NFe(XMLNFe):
         #
         # Mas, por segurança, é preferível que esse número não seja aleatório de todo
         #
-        soma = 0
-        for c in chave:
-            soma += int(c) ** 3 ** 2
+        if not self.infNFe.ide.cNF.valor:
+            soma = 0
+            for c in chave:
+                soma += int(c) ** 3 ** 2
 
-        codigo = unicode(soma)
-        if len(codigo) > 8:
-            codigo = codigo[-8:]
+            codigo = unicode(soma)
+            if len(codigo) > 8:
+                codigo = codigo[-8:]
+            else:
+                codigo = codigo.rjust(8, u'0')
+
+            chave += codigo
+            #
+            # Define na estrutura do XML o campo cNF
+            #
+            self.infNFe.ide.cNF.valor = unicode(self.infNFe.ide.tpEmis.valor).zfill(1) + codigo
         else:
-            codigo = codigo.rjust(8, u'0')
+            chave += self.infNFe.ide.cNF.valor
 
-        chave += codigo
-
-        #
-        # Define na estrutura do XML o campo cNF
-        #
-        self.infNFe.ide.cNF.valor = unicode(self.infNFe.ide.tpEmis.valor).zfill(1) + codigo
 
         #
         # Gera o dígito verificador

@@ -69,8 +69,15 @@ class Certificado(object):
 
     @property
     def proprietario_nome(self):
-        if self.proprietario.get('CN', False):
-            return self.proprietario['CN'].rsplit(':',1)[0] 
+        if 'CN' in self.proprietario:
+            #
+            # Alguns certrificados não têm o CNPJ na propriedade CN, somente o
+            # nome do proprietário
+            #
+            if ':' in self.proprietario['CN']:
+                return self.proprietario['CN'].rsplit(':',1)[0]
+            else:
+                return self.proprietario['CN']
         else: # chave CN ainda não disponível
             try:
                 self.prepara_certificado_arquivo_pfx()
@@ -80,8 +87,15 @@ class Certificado(object):
 
     @property
     def proprietario_cnpj(self):
-        if self.proprietario.get('CN', False):
-            return self.proprietario['CN'].rsplit(':',1)[1] 
+        if 'CN' in self.proprietario:
+            #
+            # Alguns certrificados não têm o CNPJ na propriedade CN, somente o
+            # nome do proprietário
+            #
+            if ':' in self.proprietario['CN']:
+                return self.proprietario['CN'].rsplit(':',1)[1]
+            else:
+                return ''
         else: #chave CN ainda não disponível
             try:
                 self.prepara_certificado_arquivo_pfx()
@@ -170,6 +184,8 @@ class Certificado(object):
             doctype = u'<!DOCTYPE NFe [<!ATTLIST infNFe Id ID #IMPLIED>]>'
         elif u'infCanc' in xml:
             doctype = u'<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
+        elif u'infEvento' in xml:
+            doctype = u'<!DOCTYPE envEvento [<!ATTLIST infEvento Id ID #IMPLIED>]>'
         elif u'infInut' in xml:
             doctype = u'<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
         else:
@@ -202,6 +218,8 @@ class Certificado(object):
             doctype = u'<!DOCTYPE NFe [<!ATTLIST infNFe Id ID #IMPLIED>]>'
         elif u'infCanc' in xml:
             doctype = u'<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
+        elif u'infEvento' in xml:
+            doctype = u'<!DOCTYPE envEvento [<!ATTLIST infEvento Id ID #IMPLIED>]>'
         elif u'infInut' in xml:
             doctype = u'<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
         else:

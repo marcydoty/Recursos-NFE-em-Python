@@ -16,8 +16,8 @@ class Signature(XMLNFe):
         super(Signature, self).__init__()
         self.URI = u''
         self.DigestValue = u''
-        self.SignatureValue = u'' 
-        self.X509Certificate = u'' 
+        self.SignatureValue = u''
+        self.X509Certificate = u''
         self.caminho_esquema = os.path.join(DIRNAME, u'schema/')
         self.arquivo_esquema = u'xmldsig-core-schema_v1.01.xsd'
 
@@ -52,10 +52,10 @@ class Signature(XMLNFe):
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
-            self.URI = self._le_tag(u'//sig:Signature/sig:SignedInfo/sig:Reference', u'URI')
-            self.DigestValue = self._le_tag(u'//sig:Signature/sig:SignedInfo/sig:Reference/sig:DigestValue')
-            self.SignatureValue = self._le_tag(u'//sig:Signature/sig:SignatureValue')
-            self.X509Certificate = self._le_tag(u'//sig:Signature/sig:KeyInfo/sig:X509Data/sig:X509Certificate')
+            self.URI = self._le_tag(u'//sig:Signature/sig:SignedInfo/sig:Reference', u'URI') or u''
+            self.DigestValue = self._le_tag(u'//sig:Signature/sig:SignedInfo/sig:Reference/sig:DigestValue') or u''
+            self.SignatureValue = self._le_tag(u'//sig:Signature/sig:SignatureValue') or u''
+            self.X509Certificate = self._le_tag(u'//sig:Signature/sig:KeyInfo/sig:X509Data/sig:X509Certificate') or u''
 
         return self.xml
 
