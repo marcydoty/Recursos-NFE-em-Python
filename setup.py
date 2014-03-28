@@ -16,4 +16,5 @@ setup(
 	"License :: LGPL",],
     package_dir={'nfe': 'nfe'},
     package_data={'nfe': ['pysped/relato_sped/fonts/*','pysped/nfe/danfe/fonts/*']},
+
 )
