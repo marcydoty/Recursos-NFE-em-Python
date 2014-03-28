@@ -21,7 +21,7 @@ import webservices_2
 from nfe.pysped.xml_sped.certificado import Certificado
 
 
-
+#
 #
 # Manual do Contribuinte versão 4.01
 # NF-e leiaute 2.00
