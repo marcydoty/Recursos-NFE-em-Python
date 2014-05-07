@@ -3037,7 +3037,7 @@ class NFe(XMLNFe):
 
         if len(fone) <= 8:
             formatado = fone[:-4] + u'-' + fone[-4:]
-        elif len(fone) <= 10:
+        elif len(fone) <= 12:
             ddd = fone[0:2]
             fone = fone[2:]
             formatado = u'(' + ddd + u') ' + fone[:-4] + u'-' + fone[-4:]
