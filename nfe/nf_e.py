@@ -18,7 +18,7 @@ class nf_e(object):
     @author: Marcilene Ribeiro
     """
 
-    def extrair_certificado_a1(arquivo, senha):
+    def extrair_certificado_a1(self, arquivo, senha):
         '''
         Extrai o conteúdo do certificado A1
         @param arquivo:arquivo binário do certificado
@@ -42,7 +42,7 @@ class nf_e(object):
         }
         return vals
 
-    def consultar_servidor(cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def consultar_servidor(self, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
         """
         Este método verifica se o servidor está em operação
         @param cert: string do certificado digital A1,
@@ -72,7 +72,7 @@ class nf_e(object):
         return{'status': status, 'envio': processo.envio.xml, 'resposta': processo.resposta.xml, 'reason': processo.resposta.reason}
 
 
-    def processar_nfe(xml_nfe, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def processar_nfe(self, xml_nfe, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
         """
         Este método realiza o processamento de validação, assinatura e transmissão da nfe.
         @param xml_nfe:xml da nfe (string)
@@ -126,7 +126,7 @@ class nf_e(object):
         return vals
 
 
-    def processar_lote(lista_xml_nfe, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def processar_lote(self, lista_xml_nfe, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
         """
         Este método realiza o processamento de validação, assinatura e transmissão da nfe.
         @param lista_xml_nfe:lista nfe
@@ -162,7 +162,7 @@ class nf_e(object):
         return {'envio': processo.envio.xml, 'resposta': processo.resposta.xml, 'reason': processo.resposta.reason}
 
 
-    def cancelar_nota(cnpj, chave, protocolo, justificativa, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def cancelar_nota(self, cnpj, chave, protocolo, justificativa, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
         """
         Realiza o cancelamento da nfe.
         @param chave:chave da nfe
@@ -197,7 +197,7 @@ class nf_e(object):
         return vals
 
 
-    def inutilizar_nota(cnpj, serie, numero, justificativa, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def inutilizar_nota(self, cnpj, serie, numero, justificativa, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
         """
         Realiza a inutilização do número de uma nota fiscal
         @param cnpj:cnpj do emitente
@@ -232,7 +232,7 @@ class nf_e(object):
                 'reason': processo.resposta.reason}
         return vals
 
-    def inutilizar_faixa_numeracao(cnpj, serie, numero_inicial, numero_final, justificativa, cert, key, versao=u'2.00', ambiente=2, estado=u'MG',
+    def inutilizar_faixa_numeracao(self, cnpj, serie, numero_inicial, numero_final, justificativa, cert, key, versao=u'2.00', ambiente=2, estado=u'MG',
                                    scan=False):
         """
         Realiza a inutilização de faixa de numeração de nota fiscal
@@ -273,7 +273,7 @@ class nf_e(object):
 
         return vals
 
-    def gerar_danfe(nfe, retcan_nfe=None, site_emitente=u'', logo=u'', nome_sistema=u'SigERP - www.sigsolucoes.net.br', leiaute_logo_vertical=False):
+    def gerar_danfe(self, nfe, retcan_nfe=None, site_emitente=u'', logo=u'', nome_sistema=u'SigERP - www.sigsolucoes.net.br', leiaute_logo_vertical=False):
         """
         Geração do DANFE
         @param nfe:string do xml da NF-e
@@ -310,7 +310,7 @@ class nf_e(object):
 
         return d.danfe
 
-    def validar_chave_nfe(chave, uf, data_emissao, cnpj, modelo, serie, numero_nf):
+    def validar_chave_nfe(self, chave, uf, data_emissao, cnpj, modelo, serie, numero_nf):
         """
         Verifica consistência da chave de NF-e informada
         @param chave:Chave da NF-e
@@ -351,7 +351,7 @@ class nf_e(object):
             res['valida'] = False
         return res
 
-    def consultar_nfe(chave, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def consultar_nfe(self,chave, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
         """
             @param chave:chave da nfe
             @param cert: string do certificado digital A1,
@@ -380,7 +380,7 @@ class nf_e(object):
         return vals
 
 
-    def consultar_cadastro(cpf_cnpj, inscricao_estadual, uf, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def consultar_cadastro(self, cpf_cnpj, inscricao_estadual, uf, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
         """
             @param chave:chave da nfe
             @param cert: string do certificado digital A1,
@@ -413,7 +413,7 @@ class nf_e(object):
 
     #MANIFESTAÇÃO DO DESTINATÁRIO
 
-    def efetuar_manifesto(cnpj, tipo_evento, chave,  cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def efetuar_manifesto(self, cnpj, tipo_evento, chave,  cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
         """
             Realiza o manifesto do destinatário
             @param chave:chave da nfe
@@ -448,7 +448,7 @@ class nf_e(object):
         return vals
 
 
-    def consultar_nfe_destinatario(cnpj, indnfe, indemi, cert, key, nsu='0', versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def consultar_nfe_destinatario(self, cnpj, indnfe, indemi, cert, key, nsu='0', versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
         """
             Realiza  a consulta do manifesto do destinatário
             @param cert: string do certificado digital A1,
@@ -532,7 +532,7 @@ class nf_e(object):
 
         return vals
 
-    def download_xml(cnpj, chave,  cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def download_xml(self, cnpj, chave,  cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
         """
             Realiza  a consulta do manifesto do destinatário
             @param chave:chave da nfe
@@ -567,7 +567,7 @@ class nf_e(object):
 
     #CARTA DE CORRECAO
 
-    def emitir_carta_correcao(chave, cnpj, texto_correcao, cert, key, sequencia=None,versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def emitir_carta_correcao(self, chave, cnpj, texto_correcao, cert, key, sequencia=None,versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
         """
             @param chave:chave da nfe
             @param cert: string do certificado digital A1,
