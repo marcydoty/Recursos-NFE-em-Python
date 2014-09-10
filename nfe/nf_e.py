@@ -42,7 +42,8 @@ class nf_e(object):
         }
         return vals
 
-    def consultar_servidor(self, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def consultar_servidor(self, cert, key, versao=u'2.00', ambiente=2, estado=u'MG',
+                           tipo_contingencia=False):
         """
         Este método verifica se o servidor está em operação
         @param cert: string do certificado digital A1,
@@ -50,7 +51,7 @@ class nf_e(object):
         @param versao: versão da nfe,
         @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
         @param estado: estado em que realizará a consulta do servidor,
-        @param scan: habilita a contigência SCAN. 
+        @param tipo_contingencia : habilita a contigência.
         @return: Dicionário com o status,envio,resposta e reason.
         """
 
@@ -61,7 +62,7 @@ class nf_e(object):
         p.certificado.cert_str = cert
         p.certificado.key_str = key
         p.salvar_arquivos = False
-        p.contingencia_SCAN = scan
+        p.tipo_contingencia = tipo_contingencia
         p.caminho = u''
         processo = p.consultar_servico()
         status = processo.resposta.cStat.valor
@@ -72,7 +73,8 @@ class nf_e(object):
         return{'status': status, 'envio': processo.envio.xml, 'resposta': processo.resposta.xml, 'reason': processo.resposta.reason}
 
 
-    def processar_nfe(self, xml_nfe, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def processar_nfe(self, xml_nfe, cert, key, versao=u'2.00', ambiente=2, estado=u'MG',
+                      tipo_contingencia=False):
         """
         Este método realiza o processamento de validação, assinatura e transmissão da nfe.
         @param xml_nfe:xml da nfe (string)
@@ -81,17 +83,18 @@ class nf_e(object):
         @param versao: versão da nfe,
         @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
         @param estado: estado em que realizará o processamento,
-        @param scan: habilita a contigência SCAN. 
+        @param tipo_contingencia: habilita a contigência .
         @return: Dicionário com a chave_nfe, protocolo, envio, numero_lote, resposta, status_resposta,status_motivo e reason.
         """
 
         p = ProcessadorNFe()
         p.ambiente = ambiente
         p.estado = estado
+        p.versao = versao
         p.certificado.cert_str = cert
         p.certificado.key_str = key
         p.salvar_arquivos = True
-        p.contingencia_SCAN = scan
+        p.tipo_contingencia = tipo_contingencia
         p.caminho = u''
         n = NFe_200()
         n.infNFe.xml = xml_nfe
@@ -126,7 +129,8 @@ class nf_e(object):
         return vals
 
 
-    def processar_lote(self, lista_xml_nfe, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def processar_lote(self, lista_xml_nfe, cert, key, versao=u'2.00', ambiente=2, estado=u'MG',
+                       tipo_contingencia=False):
         """
         Este método realiza o processamento de validação, assinatura e transmissão da nfe.
         @param lista_xml_nfe:lista nfe
@@ -135,18 +139,18 @@ class nf_e(object):
         @param versao: versão da nfe,
         @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
         @param estado: estado em que realizará o processamento,
-        @param scan: habilita a contigência SCAN. 
+        @param tipo_contingencia: habilita a contigência .
         @return: Dicionário com o envio,resposta e reason.
         """
 
         p = ProcessadorNFe()
         p.ambiente = ambiente
         p.estado = estado
-
+        p.versao=versao
+        p.tipo_contingencia = tipo_contingencia
         p.certificado.cert_str = cert
         p.certificado.key_str = key
         p.salvar_arquivos = False
-        p.contingencia_SCAN = scan
         p.caminho = u''
         n = NFe_200()
         lista = []
@@ -159,10 +163,12 @@ class nf_e(object):
             processo.resposta.xml
             processo.resposta.reason
 
-        return {'envio': processo.envio.xml, 'resposta': processo.resposta.xml, 'reason': processo.resposta.reason}
+        return {'envio': processo.envio.xml, 'resposta': processo.resposta.xml,
+                'reason': processo.resposta.reason}
 
 
-    def cancelar_nota(self, cnpj, chave, protocolo, justificativa, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def cancelar_nota(self, cnpj, chave, protocolo, justificativa, cert, key, versao=u'2.00',
+                      ambiente=2, estado=u'MG', tipo_contingencia=False):
         """
         Realiza o cancelamento da nfe.
         @param chave:chave da nfe
@@ -173,18 +179,19 @@ class nf_e(object):
         @param versao: versão da nfe,
         @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
         @param estado: estado em que realizará o processamento,
-        @param scan: habilita a contigência SCAN. 
+        @param tipo_contingencia: habilita a contigência .
         @return: Dicionário com o envio,resposta e reason.
         """
         p = ProcessadorNFe()
         p.versao = versao
         p.estado = estado
         p.ambiente = ambiente
+        p.tipo_contingencia = tipo_contingencia
         p.certificado.cert_str = cert
         p.certificado.key_str = key
-        p.contingencia_SCAN = scan
         p.salvar_arquivos = False
-        processo = p.cancelar_nota(cnpj, chave_nfe=chave, numero_protocolo=protocolo, justificativa=justificativa)
+        processo = p.cancelar_nota(cnpj, chave_nfe=chave, numero_protocolo=protocolo,
+                                   justificativa=justificativa)
         processo.resposta.reason
         vals = {'envio': processo.envio.xml,
                 'resposta': processo.processo_cancelamento_nfe.xml,
@@ -197,7 +204,8 @@ class nf_e(object):
         return vals
 
 
-    def inutilizar_nota(self, cnpj, serie, numero, justificativa, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def inutilizar_nota(self, cnpj, serie, numero, justificativa, cert, key, versao=u'2.00',
+                        ambiente=2, estado=u'MG', tipo_contingencia=False):
         """
         Realiza a inutilização do número de uma nota fiscal
         @param cnpj:cnpj do emitente
@@ -209,17 +217,17 @@ class nf_e(object):
         @param versao: versão da nfe,
         @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
         @param estado: estado em que realizará o processamento,
-        @param scan: habilita a contigência SCAN. 
+        @param tipo_contingencia: habilita a contigência .
         @return: Dicionário com o envio,resposta e reason.
         """
         p = ProcessadorNFe()
-        p.versao = u'2.00'
-        p.estado = u'MG'
-        p.ambiente = 2
+        p.versao = versao
+        p.estado = estado
+        p.ambiente = ambiente
         p.certificado.cert_str = cert
         p.certificado.key_str = key
         p.salvar_arquivos = False
-        p.contingencia_SCAN = scan
+        p.tipo_contingencia = tipo_contingencia
         p.caminho = u''
         processo = p.inutilizar_nota(cnpj=cnpj, serie=serie, numero_inicial=numero, justificativa=justificativa)
         processo.envio.xml
@@ -232,8 +240,9 @@ class nf_e(object):
                 'reason': processo.resposta.reason}
         return vals
 
-    def inutilizar_faixa_numeracao(self, cnpj, serie, numero_inicial, numero_final, justificativa, cert, key, versao=u'2.00', ambiente=2, estado=u'MG',
-                                   scan=False):
+    def inutilizar_faixa_numeracao(self, cnpj, serie, numero_inicial, numero_final, justificativa,
+                                   cert, key, versao=u'2.00', ambiente=2, estado=u'MG',
+                                   tipo_contingencia=False):
         """
         Realiza a inutilização de faixa de numeração de nota fiscal
         @param cnpj:cnpj do emitente
@@ -246,20 +255,21 @@ class nf_e(object):
         @param versao: versão da nfe,
         @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
         @param estado: estado em que realizará o processamento,
-        @param scan: habilita a contigência SCAN. 
+        @param tipo_contingencia: habilita a contigência .
         @return: Dicionário com o envio,resposta e reason.
         """
 
         p = ProcessadorNFe()
-        p.versao = u'2.00'
-        p.estado = u'MG'
-        p.ambiente = 2
+        p.versao = versao
+        p.estado = estado
+        p.ambiente = ambiente
         p.certificado.cert_str = cert
         p.certificado.key_str = key
         p.salvar_arquivos = False
-        p.contingencia_SCAN = scan
+        p.tipo_contingencia = tipo_contingencia
         p.caminho = u''
-        processo = p.inutilizar_nota(cnpj=cnpj, serie=serie, numero_inicial=numero_inicial, numero_final=numero_final, justificativa=justificativa)
+        processo = p.inutilizar_nota(cnpj=cnpj, serie=serie, numero_inicial=numero_inicial,
+                                     numero_final=numero_final, justificativa=justificativa)
         processo.envio.xml
         processo.resposta.xml
         processo.resposta.reason
@@ -273,7 +283,8 @@ class nf_e(object):
 
         return vals
 
-    def gerar_danfe(self, nfe, retcan_nfe=None, site_emitente=u'', logo=u'', nome_sistema=u'SigERP - www.sigsolucoes.net.br', leiaute_logo_vertical=False):
+    def gerar_danfe(self, nfe, retcan_nfe=None, site_emitente=u'', logo=u'',
+                    nome_sistema=u'SigERP - www.sigsolucoes.net.br', leiaute_logo_vertical=False):
         """
         Geração do DANFE
         @param nfe:string do xml da NF-e
@@ -351,7 +362,8 @@ class nf_e(object):
             res['valida'] = False
         return res
 
-    def consultar_nfe(self,chave, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def consultar_nfe(self,chave, cert, key, versao=u'2.00', ambiente=2, estado=u'MG',
+                      tipo_contingencia=False):
         """
             @param chave:chave da nfe
             @param cert: string do certificado digital A1,
@@ -359,7 +371,7 @@ class nf_e(object):
             @param versao: versão da nfe,
             @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
             @param estado: estado em que realizará o processamento,
-            @param scan: habilita a contigência SCAN.
+            @param tipo_contingencia: habilita a contigência .
             @return: Dicionário com o envio,resposta e reason.
         """
         p = ProcessadorNFe()
@@ -368,7 +380,7 @@ class nf_e(object):
         p.ambiente = ambiente
         p.certificado.cert_str = cert
         p.certificado.key_str = key
-        p.contingencia_SCAN = scan
+        p.tipo_contingencia=tipo_contingencia
         p.salvar_arquivos = False
         processo, arquivos = p.consultar_nota(chave_nfe=chave)
         vals = {'envio': processo.envio.xml,
@@ -380,7 +392,8 @@ class nf_e(object):
         return vals
 
 
-    def consultar_cadastro(self, cpf_cnpj, inscricao_estadual, uf, cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def consultar_cadastro(self, cpf_cnpj, inscricao_estadual, uf, cert, key, versao=u'2.00',
+                           ambiente=2, estado=u'MG', tipo_contingencia=False):
         """
             @param chave:chave da nfe
             @param cert: string do certificado digital A1,
@@ -388,22 +401,25 @@ class nf_e(object):
             @param versao: versão da nfe,
             @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
             @param estado: estado em que realizará o processamento,
-            @param scan: habilita a contigência SCAN.
+            @param tipo_contingencia: habilita a contigência .
             @return: Dicionário com o envio,resposta e reason.
              """
         p = ProcessadorNFe()
         p.versao = versao
         p.estado = estado
-        if uf in ('AC', 'RN', 'PB', 'SC', 'AC', 'AL', 'AP', 'DF', 'PB', 'RJ', 'RN', 'RO', 'RR', 'SC', 'SE', 'TO'):
+        if uf in ('AC', 'RN', 'PB', 'SC', 'AC', 'AL', 'AP', 'DF', 'PB', 'RJ', 'RN', 'RO', 'RR',
+                  'SC', 'SE', 'TO'):
             SVRS[NFE_AMBIENTE_PRODUCAO][u'servidor'] = u'svp-ws.sefazvirtual.rs.gov.br'
         if uf == 'RS':
             UFRS[NFE_AMBIENTE_PRODUCAO][u'servidor'] = u'sef.sefaz.rs.gov.br'
         p.ambiente = ambiente
         p.certificado.cert_str = cert
         p.certificado.key_str = key
-        p.contingencia_SCAN = scan
+        p.tipo_contingencia = tipo_contingencia
         p.salvar_arquivos = False
-        processo = p.consultar_cadastro_contribuinte(cpf_cnpj=cpf_cnpj, inscricao_estadual=inscricao_estadual, uf=uf, ambiente=ambiente)
+        processo = p.consultar_cadastro_contribuinte(cpf_cnpj=cpf_cnpj,
+                                                     inscricao_estadual=inscricao_estadual, uf=uf,
+                                                     ambiente=ambiente)
         vals = {'envio': processo.envio.xml,
                 'resposta': processo.resposta.xml,
                 'status_resposta': processo.resposta.infCons.cStat.valor,
@@ -413,7 +429,8 @@ class nf_e(object):
 
     #MANIFESTAÇÃO DO DESTINATÁRIO
 
-    def efetuar_manifesto(self, cnpj, tipo_evento, chave,  cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def efetuar_manifesto(self, cnpj, tipo_evento, chave,  cert, key, versao=u'2.00', ambiente=2,
+                          estado=u'MG', tipo_contingencia=False):
         """
             Realiza o manifesto do destinatário
             @param chave:chave da nfe
@@ -422,7 +439,7 @@ class nf_e(object):
             @param versao: versão da nfe,
             @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
             @param estado: estado em que realizará o processamento,
-            @param scan: habilita a contigência SCAN.
+            @param tipo_contingencia: habilita a contigência .
             @return: Dicionário com o envio,resposta e reason.
             """
         p = ProcessadorNFe()
@@ -433,7 +450,7 @@ class nf_e(object):
         p.ambiente = ambiente
         p.certificado.cert_str = cert
         p.certificado.key_str = key
-        p.contingencia_SCAN = scan
+        p.tipo_contingencia = tipo_contingencia
         p.salvar_arquivos = False
         processo = p.consultar_manifesto_destinatario(cnpj, tipo_evento=tipo_evento, chave_nfe=chave)
 
@@ -448,7 +465,8 @@ class nf_e(object):
         return vals
 
 
-    def consultar_nfe_destinatario(self, cnpj, indnfe, indemi, cert, key, nsu='0', versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def consultar_nfe_destinatario(self, cnpj, indnfe, indemi, cert, key, nsu='0', versao=u'2.00',
+                                   ambiente=2, estado=u'MG', tipo_contingencia=False):
         """
             Realiza  a consulta do manifesto do destinatário
             @param cert: string do certificado digital A1,
@@ -456,7 +474,7 @@ class nf_e(object):
             @param versao: versão da nfe,
             @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
             @param estado: estado em que realizará o processamento,
-            @param scan: habilita a contigência SCAN.
+            @param tipo_contingencia: habilita a contigência .
             @return: Dicionário com o envio,resposta e reason.
             """
         p = ProcessadorNFe()
@@ -467,7 +485,7 @@ class nf_e(object):
         p.ambiente = ambiente
         p.certificado.cert_str = cert
         p.certificado.key_str = key
-        p.contingencia_SCAN = scan
+        p.tipo_contingencia = tipo_contingencia
         p.salvar_arquivos = False
         processo = p.consultar_notas_destinatario(cnpj=cnpj, indnfe=indnfe, indemi=indemi, nsu=nsu)
         resp = processo.resposta
@@ -532,7 +550,8 @@ class nf_e(object):
 
         return vals
 
-    def download_xml(self, cnpj, chave,  cert, key, versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def download_xml(self, cnpj, chave,  cert, key, versao=u'2.00', ambiente=2, estado=u'MG',
+                     tipo_contingencia=False):
         """
             Realiza  a consulta do manifesto do destinatário
             @param chave:chave da nfe
@@ -541,7 +560,7 @@ class nf_e(object):
             @param versao: versão da nfe,
             @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
             @param estado: estado em que realizará o processamento,
-            @param scan: habilita a contigência SCAN.
+            @param tipo_contingencia: habilita a contigência .
             @return: Dicionário com o envio,resposta e reason.
             """
         p = ProcessadorNFe()
@@ -551,7 +570,7 @@ class nf_e(object):
         p.ambiente = ambiente
         p.certificado.cert_str = cert
         p.certificado.key_str = key
-        p.contingencia_SCAN = scan
+        p.tipo_contingencia = tipo_contingencia
         p.salvar_arquivos = False
         processo = p.download_nfe_xml(cnpj, ambiente, chave_nfe=chave)
 
@@ -567,7 +586,9 @@ class nf_e(object):
 
     #CARTA DE CORRECAO
 
-    def emitir_carta_correcao(self, chave, cnpj, texto_correcao, cert, key, sequencia=None,versao=u'2.00', ambiente=2, estado=u'MG', scan=False):
+    def emitir_carta_correcao(self, chave, cnpj, texto_correcao, cert, key, sequencia=None,
+                              versao=u'2.00', ambiente=2, estado=u'MG',
+                              tipo_contingencia=False):
         """
             @param chave:chave da nfe
             @param cert: string do certificado digital A1,
@@ -575,7 +596,7 @@ class nf_e(object):
             @param versao: versão da nfe,
             @param ambiente: ambiente da consulta, pode ser 1 para o ambiente de produção e 2 para homologação,
             @param estado: estado em que realizará o processamento,
-            @param scan: habilita a contigência SCAN.
+            @param tipo_contingencia: habilita a contigência .
             @return: Dicionário com o envio,resposta e reason.
             """
         p = ProcessadorNFe()
@@ -584,10 +605,10 @@ class nf_e(object):
         p.ambiente = ambiente
         p.certificado.cert_str = cert
         p.certificado.key_str = key
-        p.contingencia_SCAN = scan
         p.salvar_arquivos = False
-        p.contingencia_SCAN = scan
-        processo = p.corrigir_nota(chave_nfe=chave, cnpj=cnpj, texto_correcao=texto_correcao, ambiente=ambiente,sequencia=sequencia)
+        p.tipo_contingencia = tipo_contingencia
+        processo = p.corrigir_nota(chave_nfe=chave, cnpj=cnpj, texto_correcao=texto_correcao,
+                                   ambiente=ambiente,sequencia=sequencia)
         processo.resposta.reason
         vals = {'envio': processo.envio.xml,
                 'resposta': processo.processo_correcao_nfe.xml,

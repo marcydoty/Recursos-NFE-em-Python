@@ -512,6 +512,95 @@ UFSP = {
         }
 }
 
+'''
+Producao
+Sefaz Virtual de Contingência Ambiente Nacional - (SVC-AN)
+Data: 10-09-2014
+RecepcaoEvento	1.00	https://www.svc.fazenda.gov.br/RecepcaoEvento/RecepcaoEvento.asmx
+NfeRecepcao	2.00	https://www.svc.fazenda.gov.br/NfeRecepcao2/NfeRecepcao2.asmx
+NfeRetRecepcao	2.00	https://www.svc.fazenda.gov.br/NfeRetRecepcao2/NfeRetRecepcao2.asmx
+NfeConsultaProtocolo	2.00 / 3.10	https://www.svc.fazenda.gov.br/NfeConsulta2/NfeConsulta2.asmx
+NfeStatusServico	2.00 / 3.10	https://www.svc.fazenda.gov.br/NfeStatusServico2/NfeStatusServico2.asmx
+NFeAutorizacao	3.10	https://www.svc.fazenda.gov.br/NfeAutorizacao/NfeAutorizacao.asmx
+NFeRetAutorizacao	3.10	https://www.svc.fazenda.gov.br/NfeRetAutorizacao/NfeRetAutorizacao.asmx
+
+Homologacao
+SVC-AN
+• https://hom.svc.fazenda.gov.br/NfeRecepcao2/NfeRecepcao2.asmx
+• https://hom.svc.fazenda.gov.br/NfeRetRecepcao2/NfeRetRecepcao2.asmx
+• https://hom.svc.fazenda.gov.br/NfeInutilizacao2/NfeInutilizacao2.asmx
+• https://hom.svc.fazenda.gov.br/NfeConsulta2/NfeConsulta2.asmx
+• https://hom.svc.fazenda.gov.br/NfeStatusServico2/NfeStatusServico2.asmx
+• https://hom.svc.fazenda.gov.br/RecepcaoEvento/RecepcaoEvento.asmx
+'''
+
+
+SVC_AN = {
+    NFE_AMBIENTE_PRODUCAO: {
+        u'servidor'            : u'www.svc.fazenda.gov.br',
+        WS_NFE_ENVIO_LOTE      : u'NfeRecepcao2/NfeRecepcao2.asmx',
+        WS_NFE_CONSULTA_RECIBO : u'NfeRetRecepcao2/NfeRetRecepcao2.asmx',
+        WS_NFE_CANCELAMENTO    : u'NfeCancelamento2/NfeCancelamento2.asmx',
+        WS_NFE_EVENTO          : u'RecepcaoEvento/RecepcaoEvento.asmx',
+        WS_NFE_INUTILIZACAO    : u'NFeInutilizacao2/NFeInutilizacao2.asmx',
+        WS_NFE_CONSULTA        : u'NfeConsulta2/NfeConsulta2.asmx',
+        WS_NFE_SITUACAO        : u'NFeStatusServico2/NFeStatusServico2.asmx'
+    },
+    NFE_AMBIENTE_HOMOLOGACAO: {
+        u'servidor'            : u'hom.svc.fazenda.gov.br',
+        WS_NFE_ENVIO_LOTE      : u'NfeRecepcao2/NfeRecepcao2.asmx',
+        WS_NFE_CONSULTA_RECIBO : u'NfeRetRecepcao2/NfeRetRecepcao2.asmx',
+        WS_NFE_CANCELAMENTO    : u'NfeCancelamento2/NfeCancelamento2.asmx',
+        WS_NFE_EVENTO          : u'RecepcaoEvento/RecepcaoEvento.asmx',
+        WS_NFE_INUTILIZACAO    : u'NfeInutilizacao2/NfeInutilizacao2.asmx',
+        WS_NFE_CONSULTA        : u'NfeConsulta2/NfeConsulta2.asmx',
+        WS_NFE_SITUACAO        : u'NfeStatusServico2/NfeStatusServico2.asmx'
+    }
+}
+
+
+'''
+Producao
+
+Sefaz Virtual de Contingência Rio Grande do Sul - (SVC-RS)
+Data: 10-09-2014
+RecepcaoEvento	1.00	https://nfe.sefazvirtual.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx
+NfeRecepcao	2.00	https://nfe.sefazvirtual.rs.gov.br/ws/Nferecepcao/NFeRecepcao2.asmx
+NfeRetRecepcao	2.00	https://nfe.sefazvirtual.rs.gov.br/ws/NfeRetRecepcao/NfeRetRecepcao2.asmx
+NfeConsultaProtocolo	2.00 / 3.10	https://nfe.sefazvirtual.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx
+NfeStatusServico	2.00 / 3.10	https://nfe.sefazvirtual.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx
+NFeAutorizacao	3.10	https://nfe.sefazvirtual.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
+NFeRetAutorizacao	3.10	https://nfe.sefazvirtual.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx
+
+Homologacao
+SVC-RS (mesmos endereços da SVRS)
+• https://homologacao.nfe.sefazvirtual.rs.gov.br/ws/Nferecepcao/NFeRecepcao2.asmx
+• https://homologacao.nfe.sefazvirtual.rs.gov.br/ws/NfeRetRecepcao/NfeRetRecepcao2.asmx
+• https://homologacao.nfe.sefaz.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx
+• https://homologacao.nfe.sefazvirtual.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx
+• https://homologacao.nfe.sefazvirtual.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx
+'''
+
+
+SVC_RS = {
+    NFE_AMBIENTE_PRODUCAO: {
+        u'servidor'            : u'nfe.sefazvirtual.rs.gov.br',
+        WS_NFE_ENVIO_LOTE      : u'ws/Nferecepcao/NFeRecepcao2.asmx',
+        WS_NFE_CONSULTA_RECIBO : u'ws/NfeRetRecepcao/NfeRetRecepcao2.asmx',
+        WS_NFE_EVENTO          : u'ws/recepcaoevento/recepcaoevento.asmx',
+        WS_NFE_CONSULTA        : u'ws/NfeConsulta/NfeConsulta2.asmx',
+        WS_NFE_SITUACAO        : u'ws/NfeStatusServico/NfeStatusServico2.asmx'
+    },
+    NFE_AMBIENTE_HOMOLOGACAO: {
+        u'servidor'            : u'homologacao.nfe.sefazvirtual.rs.gov.br',
+        WS_NFE_ENVIO_LOTE      : u'ws/Nferecepcao/NFeRecepcao2.asmx',
+        WS_NFE_CONSULTA_RECIBO : u'ws/NfeRetRecepcao/NfeRetRecepcao2.asmx',
+        WS_NFE_EVENTO          : u'ws/recepcaoevento/recepcaoevento.asmx',
+        WS_NFE_CONSULTA        : u'ws/NfeConsulta/NfeConsulta2.asmx',
+        WS_NFE_SITUACAO        : u'ws/NfeStatusServico/NfeStatusServico2.asmx'
+    }
+}
+
 #
 # Informação obtida em
 # http://www.nfe.fazenda.gov.br/portal/VerificacaoDeServicos/VerificacaoServicos.aspx

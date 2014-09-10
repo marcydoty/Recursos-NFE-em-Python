@@ -77,7 +77,7 @@ class ProcessadorNFe(object):
         self.certificado = Certificado()
         self.caminho = u''
         self.salvar_arquivos = True
-        self.contingencia_SCAN = False
+        self.tipo_contingencia = False
         self.danfe = DANFE()
         self.caminho_temporario = u''
         self.processos = []
@@ -104,12 +104,18 @@ class ProcessadorNFe(object):
             self._soap_retorno.metodo     = webservices_2.METODO_WS[servico]['metodo']
             self._soap_retorno.resposta   = resposta
 
-            if self.contingencia_SCAN:
-                self._servidor = webservices_2.SCAN[ambiente][u'servidor']
-                self._url      = webservices_2.SCAN[ambiente][servico]
-            else:
+            if not self.tipo_contingencia:
                 self._servidor = webservices_2.ESTADO_WS[self.estado][ambiente][u'servidor']
                 self._url      = webservices_2.ESTADO_WS[self.estado][ambiente][servico]
+            elif self.tipo_contingencia == 'SCAN':
+                self._servidor = webservices_2.SCAN[ambiente][u'servidor']
+                self._url      = webservices_2.SCAN[ambiente][servico]
+            elif self.tipo_contingencia == 'SVC-AN':
+                self._servidor = webservices_2.SVC_AN[ambiente][u'servidor']
+                self._url      = webservices_2.SVC_AN[ambiente][servico]
+            elif self.tipo_contingencia == 'SVC-RS':
+                self._servidor = webservices_2.SVC_RS[ambiente][u'servidor']
+                self._url      = webservices_2.SVC_RS[ambiente][servico]
 
 
         #try:
@@ -1033,11 +1039,11 @@ class DANFE(object):
             self.danfe.remetente.campo_variavel_contingencia_dpec()
             self.danfe.remetente.obs_contingencia_dpec()
 
-        # Emissão normal ou contingência SCAN
+        # Emissão normal ou contingência SCAN, SVC-AN e SVC-RS
         else:
             self.danfe.remetente.campo_variavel_normal()
-            # Contingência SCAN
-            if self.NFe.infNFe.ide.tpEmis.valor == 3:
+            # Contingência SCAN,SVC-AN e SVC-RS
+            if self.NFe.infNFe.ide.tpEmis.valor in (3, 6, 7):
                 self.danfe.remetente.obs_contingencia_normal_scan()
 
         # A NF-e foi cancelada, no DANFE imprimir o "carimbo" de cancelamento
