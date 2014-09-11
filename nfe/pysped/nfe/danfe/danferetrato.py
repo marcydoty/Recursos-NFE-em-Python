@@ -463,8 +463,8 @@ class RemetenteRetrato(BandaDANFE):
         fld = Campo()
         fld.nome  = 'fld_rem_endereco_3'
         fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_3'
-        fld.top   = 1.7*cm
-        fld.left  = 4*cm
+        fld.top   = 3.5*cm
+        fld.left  = 2*cm
         fld.width = 4*cm
         fld.height = 0.45*cm
         fld.style = EMIT_DADOS

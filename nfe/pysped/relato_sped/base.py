@@ -93,7 +93,7 @@ DADO_VARIAVEL_CANCELAMENTO = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANH
 
 DADO_IMPRESSAO = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_5, 'leading': FONTE_TAMANHO_7}
 
-EMIT_NOME  = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_12, 'alignment': TA_CENTER, 'leading': FONTE_TAMANHO_14}
+EMIT_NOME  = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_11, 'alignment': TA_CENTER, 'leading': FONTE_TAMANHO_14}
 EMIT_DADOS = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_8, 'alignment': TA_CENTER, 'leading': FONTE_TAMANHO_10}
 
 
