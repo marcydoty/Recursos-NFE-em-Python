@@ -3,7 +3,7 @@ import os
 
 setup(
     name="python-nfe",
-    version="3.7",
+    version="3.8",
     include_package_data=True,
     author="Marcilene Ribeiro",
     author_email="marcilene@sigsolucoes.net.br",
@@ -20,6 +20,7 @@ setup(
                   'nfe.pysped.nfe.manual_401': [os.path.join('schema', 'pl_006j', '*'),
                                                 os.path.join('schema', 'pl_006r', '*'),
                                                 os.path.join('schema', 'pl_006s', '*')],
+                  'nfe.pysped.nfe.manual_500': [os.path.join('schema', 'pl_008e', '*')],
                   'nfe.pysped.xml_sped': [os.path.join('schema', '*'),
                                           os.path.join('cadeia-certificadora', 'README'),
                                           os.path.join('cadeia-certificadora', 'certificados', '*')],

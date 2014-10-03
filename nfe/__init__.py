@@ -1,7 +1,7 @@
 import nfe
 import geraldo
 
-__version__ = 3.7
+__version__ = 3.8
 __license__ = 'GNU Lesser General Public License (LGPL)'
 __url__ = 'http://github.com/marcydoty/Recursos-NFE-em-Python'
 

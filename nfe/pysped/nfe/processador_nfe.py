@@ -15,8 +15,8 @@ except ImportError:
     from ordereddict import OrderedDict
 
 from webservices_flags import *
-import webservices_1
 import webservices_2
+import webservices_3
 
 from nfe.pysped.xml_sped.certificado import Certificado
 
@@ -34,6 +34,20 @@ from manual_401 import InutNFe_200, RetInutNFe_200, ProcInutNFe_200
 from manual_401 import ConsSitNFe_200, RetConsSitNFe_200, ConsCad_200, RetConsCad_200
 from manual_401 import ConsStatServ_200, RetConsStatServ_200
 from manual_401 import  EnvEventoCCe_200, RetEnvEventoCCe_200, ProcEventoNFeCCe_200
+
+#
+# Manual do Contribuinte versão 5.00
+# NF-e leiaute 3.10
+#
+from manual_500 import SOAPEnvio_310, SOAPRetorno_310
+from manual_500 import EnviNFe_310, RetEnviNFe_310
+from manual_500 import ConsReciNFe_310, RetConsReciNFe_310, ProtNFe_310, ProcNFe_310
+from manual_500 import CancNFe_310, RetCancNFe_310, ProcCancNFe_310, EnvEvento_310, RetEnvEvento_310, ProcEventoNFe_310
+from manual_500 import InutNFe_310, RetInutNFe_310, ProcInutNFe_310
+from manual_500 import ConsSitNFe_310, RetConsSitNFe_310, ConsCad_310, RetConsCad_310
+from manual_500 import ConsStatServ_310, RetConsStatServ_310
+from manual_500 import  EnvEventoCCe_310, RetEnvEventoCCe_310, ProcEventoNFeCCe_310
+
 
 from manifestacao_destinatario import EnvConfRecebto_200, RetEnvConfRecebto_200
 from manifestacao_destinatario import ConsNFeDest_200, RetConsNFeDest_200, ProcEventoNFeRecebto_200
@@ -88,6 +102,7 @@ class ProcessadorNFe(object):
         self._soap_retorno = None
 
     def _conectar_servico(self, servico, envio, resposta, ambiente=None):
+        print 'nfe versao...', self.versao
         print 'conectando ao servico SEFAZ.........'
         if ambiente is None:
             ambiente = self.ambiente
@@ -117,6 +132,31 @@ class ProcessadorNFe(object):
                 self._servidor = webservices_2.SVC_RS[ambiente][u'servidor']
                 self._url      = webservices_2.SVC_RS[ambiente][servico]
 
+
+        if self.versao == u'3.10':
+            self._soap_envio   = SOAPEnvio_310()
+            self._soap_envio.webservice = webservices_3.METODO_WS[servico]['webservice']
+            self._soap_envio.metodo     = webservices_3.METODO_WS[servico]['metodo']
+            self._soap_envio.cUF        = UF_CODIGO[self.estado]
+            self._soap_envio.envio      = envio
+
+            self._soap_retorno = SOAPRetorno_310()
+            self._soap_retorno.webservice = webservices_3.METODO_WS[servico]['webservice']
+            self._soap_retorno.metodo     = webservices_3.METODO_WS[servico]['metodo']
+            self._soap_retorno.resposta   = resposta
+
+            if not self.tipo_contingencia:
+                self._servidor = webservices_3.ESTADO_WS[self.estado][ambiente][u'servidor']
+                self._url      = webservices_3.ESTADO_WS[self.estado][ambiente][servico]
+            elif self.tipo_contingencia == 'SCAN':
+                self._servidor = webservices_3.SCAN[ambiente][u'servidor']
+                self._url      = webservices_3.SCAN[ambiente][servico]
+            elif self.tipo_contingencia == 'SVC-AN':
+                self._servidor = webservices_3.SVC_AN[ambiente][u'servidor']
+                self._url      = webservices_3.SVC_AN[ambiente][servico]
+            elif self.tipo_contingencia == 'SVC-RS':
+                self._servidor = webservices_3.SVC_RS[ambiente][u'servidor']
+                self._url      = webservices_3.SVC_RS[ambiente][servico]
 
         #try:
         self.certificado.prepara_certificado_arquivo_pfx()
@@ -160,10 +200,14 @@ class ProcessadorNFe(object):
         self._soap_retorno.resposta.reason   = unicode(resp.reason.decode('utf-8'))
         self._soap_retorno.resposta.msg      = resp.msg
         self._soap_retorno.resposta.original = unicode(resp.read().decode('utf-8'))
-
+        print 'servidor', self._servidor
+        print 'STATUS________________________________________-', self._soap_retorno.resposta.original
         # Tudo certo!
         if self._soap_retorno.resposta.status == 200:
             self._soap_retorno.xml = self._soap_retorno.resposta.original
+            print 15*'=='
+            print self._soap_retorno.xml
+            print 15*'=='
         #except Exception, e:
             #raise e
         #else:
@@ -176,8 +220,13 @@ class ProcessadorNFe(object):
         if self.versao == u'2.00':
             envio = EnviNFe_200()
             resposta = RetEnviNFe_200()
+            webservice = WS_NFE_ENVIO_LOTE
+        elif self.versao == u'3.10':
+            envio = EnviNFe_310()
+            resposta = RetEnviNFe_310()
+            webservice = WS_NFE_AUTORIZACAO
 
-        processo = ProcessoNFe(webservice=WS_NFE_ENVIO_LOTE, envio=envio, resposta=resposta)
+        processo = ProcessoNFe(webservice=webservice, envio=envio, resposta=resposta)
 
         #
         # Vamos assinar e validar todas as NF-e antes da transmissão, evitando
@@ -208,7 +257,7 @@ class ProcessadorNFe(object):
        
 
 
-        self._conectar_servico(WS_NFE_ENVIO_LOTE, envio, resposta)
+        self._conectar_servico(webservice, envio, resposta)
 
         novo_arquivo_nome = unicode(envio.idLote.valor).strip().rjust(15, u'0') + u'-rec'
 
@@ -228,8 +277,13 @@ class ProcessadorNFe(object):
         if self.versao == u'2.00':
             envio = ConsReciNFe_200()
             resposta = RetConsReciNFe_200()
+            webservice = WS_NFE_CONSULTA_RECIBO
+        elif self.versao == u'3.10':
+            envio = ConsReciNFe_310()
+            resposta = RetConsReciNFe_310()
+            webservice = WS_NFE_RET_AUTORIZACAO
 
-        processo = ProcessoNFe(webservice=WS_NFE_CONSULTA_RECIBO, envio=envio, resposta=resposta)
+        processo = ProcessoNFe(webservice=webservice, envio=envio, resposta=resposta)
 
         if ambiente is None:
             ambiente = self.ambiente
@@ -243,7 +297,7 @@ class ProcessadorNFe(object):
         novo_arquivo = envio.xml.encode('utf-8')
         novos_arquivos.append((novo_arquivo_nome, novo_arquivo))
 
-        self._conectar_servico(WS_NFE_CONSULTA_RECIBO, envio, resposta, ambiente)
+        self._conectar_servico(webservice, envio, resposta, ambiente)
 
         novo_arquivo_nome = unicode(envio.nRec.valor).strip().rjust(15, u'0') + u'-pro-rec'
 
@@ -387,9 +441,9 @@ class ProcessadorNFe(object):
 
     def download_nfe_xml(self, cnpj=None,ambiente=None, chave_nfe=None):
         novos_arquivos = []
-
-        envio = DownloadNFe_200()
-        resposta = RetDownloadNFe_200()
+        if self.versao == u'2.00':
+            envio = DownloadNFe_200()
+            resposta = RetDownloadNFe_200()
 
         processo = ProcessoNFe(webservice=WS_NFE_DOWNLOAD_XML_DESTINATARIO, envio=envio, resposta=resposta)
 
@@ -417,9 +471,12 @@ class ProcessadorNFe(object):
 
     def consultar_cadastro_contribuinte(self, cpf_cnpj=None, inscricao_estadual=None, uf=None, ambiente=None):
         novos_arquivos = []
-
-        envio = ConsCad_200()
-        resposta = RetConsCad_200()
+        if self.versao == u'2.00':
+            envio = ConsCad_200()
+            resposta = RetConsCad_200()
+        elif self.versao == u'3.10':
+            envio = ConsCad_310()
+            resposta = RetConsCad_310()
 
         processo = ProcessoNFe(webservice=WS_NFE_CONSULTA_CADASTRO, envio=envio, resposta=resposta)
 
@@ -448,11 +505,15 @@ class ProcessadorNFe(object):
 
         return processo
 
-    def corrigir_nota(self, chave_nfe=None, cnpj=None, texto_correcao=None, ambiente=None, sequencia=None):
+    def corrigir_nota(self, chave_nfe=None, cnpj=None, texto_correcao=None, ambiente=None,
+                      sequencia=None):
         novos_arquivos = []
-
-        envio = EnvEventoCCe_200()
-        resposta = RetEnvEventoCCe_200()
+        if self.versao == u'3.10':
+            envio = EnvEventoCCe_310()
+            resposta = RetEnvEventoCCe_310()
+        elif self.versao == u'2.00':
+            envio = EnvEventoCCe_200()
+            resposta = RetEnvEventoCCe_200()
 
         processo = ProcessoNFe(webservice=WS_NFE_EVENTO, envio=envio, resposta=resposta)
 
@@ -485,9 +546,10 @@ class ProcessadorNFe(object):
 
         # Se for autorizado
         if resposta.cStat.valor == u'128':
-
-            processo_correcao_nfe = ProcEventoNFe_200()
-
+            if self.versao == u'2.00':
+                processo_correcao_nfe = ProcEventoNFeCCe_200()
+            elif self.versao == u'3.10':
+                processo_correcao_nfe = ProcEventoNFeCCe_310()
             processo_correcao_nfe.envEvento = envio
             processo_correcao_nfe.retEnvEvento = resposta
 
@@ -515,12 +577,16 @@ class ProcessadorNFe(object):
 
         return processo
 
-    def cancelar_nota(self, cnpj=None, ambiente=None, chave_nfe=None, numero_protocolo=None, justificativa=None):
+    def cancelar_nota(self, cnpj=None, ambiente=None, chave_nfe=None, numero_protocolo=None,
+                      justificativa=None):
         novos_arquivos = []
 
-
-        envio = EnvEvento_200()
-        resposta = RetEnvEvento_200()
+        if self.versao == u'2.00':
+            envio = EnvEvento_200()
+            resposta = RetEnvEvento_200()
+        elif self.versao == u'3.10':
+            envio = EnvEvento_310()
+            resposta = RetEnvEvento_310()
 
         processo = ProcessoNFe(webservice=WS_NFE_EVENTO, envio=envio, resposta=resposta)
 
@@ -558,9 +624,10 @@ class ProcessadorNFe(object):
 
         # Se for autorizado, monta o processo de cancelamento
         if resposta.cStat.valor == u'128':
-
-            processo_cancelamento_nfe = ProcEventoNFe_200()
-
+            if self.versao == u'2.00':
+                processo_cancelamento_nfe = ProcEventoNFe_200()
+            elif self.versao == u'3.10':
+                processo_cancelamento_nfe = ProcEventoNFe_310()
             processo_cancelamento_nfe.envEvento = envio
             processo_cancelamento_nfe.retEnvEvento = resposta
 
@@ -588,12 +655,16 @@ class ProcessadorNFe(object):
 
         return processo
 
-    def inutilizar_nota(self, ambiente=None, codigo_estado=None, ano=None, cnpj=None, serie=None, numero_inicial=None, numero_final=None, justificativa=None):
+    def inutilizar_nota(self, ambiente=None, codigo_estado=None, ano=None, cnpj=None, serie=None,
+                        numero_inicial=None, numero_final=None, justificativa=None):
         novos_arquivos = []
 
         if self.versao == u'2.00':
             envio = InutNFe_200()
             resposta = RetInutNFe_200()
+        elif self.versao == u'3.10':
+            envio = InutNFe_310()
+            resposta = RetInutNFe_310()
 
         processo = ProcessoNFe(webservice=WS_NFE_INUTILIZACAO, envio=envio, resposta=resposta)
 
@@ -609,7 +680,8 @@ class ProcessadorNFe(object):
         if numero_final is None:
             numero_final = numero_inicial
 
-        self.caminho = self.monta_caminho_inutilizacao(ambiente=ambiente, serie=serie, numero_inicial=numero_inicial, numero_final=numero_final)
+        self.caminho = self.monta_caminho_inutilizacao(ambiente=ambiente, serie=serie,
+                                    numero_inicial=numero_inicial, numero_final=numero_final)
 
         envio.infInut.tpAmb.valor  = ambiente
         envio.infInut.cUF.valor    = codigo_estado
@@ -637,6 +709,9 @@ class ProcessadorNFe(object):
         if resposta.infInut.cStat.valor == u'102':
             if self.versao == u'2.00':
                 processo_inutilizacao_nfe = ProcInutNFe_200()
+
+            elif self.versao == u'3.10':
+                processo_inutilizacao_nfe = ProcInutNFe_310()
 
             processo_inutilizacao_nfe.inutNFe = envio
             processo_inutilizacao_nfe.retInutNFe = resposta
@@ -677,6 +752,9 @@ class ProcessadorNFe(object):
         if self.versao == u'2.00':
             envio = ConsSitNFe_200()
             resposta = RetConsSitNFe_200()
+        elif self.versao == u'3.10':
+            envio = ConsSitNFe_310()
+            resposta = RetConsSitNFe_310()
 
         processo = ProcessoNFe(webservice=WS_NFE_CONSULTA, envio=envio, resposta=resposta)
 
@@ -711,6 +789,9 @@ class ProcessadorNFe(object):
         if self.versao == u'2.00':
             envio = ConsStatServ_200()
             resposta = RetConsStatServ_200()
+        elif self.versao == u'3.10':
+            envio = ConsStatServ_310()
+            resposta = RetConsStatServ_310()
 
         processo = ProcessoNFe(webservice=WS_NFE_SITUACAO, envio=envio, resposta=resposta)
 
@@ -777,7 +858,7 @@ class ProcessadorNFe(object):
                 if not (
                     ((self.versao == u'1.10') and (proc_consulta.resposta.infProt.cStat.valor in (u'217', u'999',)))
                     or
-                    ((self.versao == u'2.00') and (proc_consulta.resposta.cStat.valor in (u'217', u'999',)))
+                    ((self.versao in (u'2.00',u'3.10')) and (proc_consulta.resposta.cStat.valor in (u'217', u'999',)))
                 ):
                     #
                     # Interrompe todo o processo
@@ -800,7 +881,7 @@ class ProcessadorNFe(object):
             #
             # Deu certo?
             #
-            print 'se o retorna,103 deu certo',ret_envi_nfe.cStat.valor
+            print 'Deu certo.... :)',ret_envi_nfe.cStat.valor
             if ret_envi_nfe.cStat.valor == u'103':
                 time.sleep(ret_envi_nfe.infRec.tMed.valor * 3) # Espere o processamento antes de consultar o recibo
                 proc_recibo, novos_arquivos = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
@@ -839,16 +920,6 @@ class ProcessadorNFe(object):
         # Sim, as informações são as mesmas, mas o leiaute não...
         # Vai entender...
         #
-        if protnfe_consulta_110 is not None:
-            protnfe_recibo = ProtNFe_110()
-            protnfe_recibo.infProt.tpAmb.valor = protnfe_consulta.infProt.tpAmb.valor
-            protnfe_recibo.infProt.verAplic.valor = protnfe_consulta.infProt.verAplic.valor
-            protnfe_recibo.infProt.chNFe.valor = protnfe_consulta.infProt.chNFe.valor
-            protnfe_recibo.infProt.dhRecbto.valor = protnfe_consulta.infProt.dhRecbto.valor
-            protnfe_recibo.infProt.cStat.valor = protnfe_consulta.infProt.cStat.valor
-            protnfe_recibo.infProt.xMotivo.valor = protnfe_consulta.infProt.xMotivo.valor
-            protnfe_recibo.infProt.nProt.valor = protnfe_consulta.infProt.nProt.valor
-            protnfe_recibo.infProt.digVal.valor = protnfe_consulta.infProt.digVal.valor
 
         caminho_original = self.caminho
         self.caminho = self.monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
@@ -859,6 +930,8 @@ class ProcessadorNFe(object):
 
             if self.versao == u'2.00':
                 processo = ProcNFe_200()
+            elif self.versao == u'3.10':
+                processo = ProcNFe_310()
 
             processo.NFe     = nfe
             processo.protNFe = protnfe_recibo
@@ -972,6 +1045,7 @@ class DANFE(object):
         self.protNFe    = None
         self.retCancNFe = None
         self.danfe      = None
+        self.versao     = '2.00'
 
         self.obs_impressao    = u'DANFE gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
         self.nome_sistema     = u''
@@ -983,11 +1057,18 @@ class DANFE(object):
     def gerar_danfe(self):
         if self.NFe is None:
             raise ValueError(u'Não é possível gerar um DANFE sem a informação de uma NF-e')
+
         if self.protNFe is None:
-            self.protNFe = ProtNFe_200()
+            if self.versao == u'2.00':
+                self.protNFe = ProtNFe_200()
+            elif self.versao == u'3.10':
+                self.protNFe = ProtNFe_310()
 
         if self.retCancNFe is None:
-            self.retCancNFe = RetCancNFe_200()
+            if self.versao == u'2.00':
+                self.retCancNFe = RetCancNFe_200()
+            elif self.versao == u'3.10':
+                self.retCancNFe = RetCancNFe_310()
 
         #
         # Prepara o queryset para impressão

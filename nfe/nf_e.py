@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from nfe.pysped.nfe import ProcessadorNFe, DANFE
-from nfe.pysped.nfe.webservices_flags import *
 from nfe.pysped.nfe.manual_401 import *
+from nfe.pysped.nfe.manual_500 import *
 from os.path import abspath, dirname
 from OpenSSL import crypto
 from StringIO import StringIO
@@ -23,7 +23,8 @@ class nf_e(object):
         Extrai o conteúdo do certificado A1
         @param arquivo:arquivo binário do certificado
         @param senha: senha do certificado.
-        @return: dicionário com a string do certificado, chave privada, emissor, proprietario, data_inicio_validade e data_final_validade.
+        @return: dicionário com a string do certificado, chave privada, emissor, proprietario, data_inicio_validade e
+        data_final_validade.
         '''
 
         conteudo_pkcs12 = crypto.load_pkcs12(arquivo, senha)
@@ -70,7 +71,8 @@ class nf_e(object):
         processo.resposta.xml
         processo.resposta.reason
 
-        return{'status': status, 'envio': processo.envio.xml, 'resposta': processo.resposta.xml, 'reason': processo.resposta.reason}
+        return{'status': status, 'envio': processo.envio.xml, 'resposta': processo.resposta.xml,
+               'reason': processo.resposta.reason}
 
 
     def processar_nfe(self, xml_nfe, cert, key, versao=u'2.00', ambiente=2, estado=u'MG',
@@ -96,7 +98,10 @@ class nf_e(object):
         p.salvar_arquivos = True
         p.tipo_contingencia = tipo_contingencia
         p.caminho = u''
-        n = NFe_200()
+        if versao == '3.10':
+            n = NFe_310()
+        else:
+            n = NFe_200()
         n.infNFe.xml = xml_nfe
         for processo in p.processar_notas([n]):
             processo.envio.xml
@@ -152,7 +157,10 @@ class nf_e(object):
         p.certificado.key_str = key
         p.salvar_arquivos = False
         p.caminho = u''
-        n = NFe_200()
+        if versao == '3.10':
+            n = NFe_310()
+        else:
+            n = NFe_200()
         lista = []
         if lista_xml_nfe:
             for x in lista_xml_nfe:
@@ -229,7 +237,8 @@ class nf_e(object):
         p.salvar_arquivos = False
         p.tipo_contingencia = tipo_contingencia
         p.caminho = u''
-        processo = p.inutilizar_nota(cnpj=cnpj, serie=serie, numero_inicial=numero, justificativa=justificativa)
+        processo = p.inutilizar_nota(cnpj=cnpj, serie=serie, numero_inicial=numero,
+                                     justificativa=justificativa)
         processo.envio.xml
         processo.resposta.xml
         processo.resposta.reason
@@ -284,7 +293,8 @@ class nf_e(object):
         return vals
 
     def gerar_danfe(self, nfe, retcan_nfe=None, site_emitente=u'', logo=u'',
-                    nome_sistema=u'SigERP - www.sigsolucoes.net.br', leiaute_logo_vertical=False):
+                    nome_sistema=u'SigERP - www.sigsolucoes.net.br', leiaute_logo_vertical=False,
+                    versao='2.00'):
         """
         Geração do DANFE
         @param nfe:string do xml da NF-e
@@ -295,18 +305,24 @@ class nf_e(object):
         """
 
         d = DANFE()
-        nota = NFe_200()
+        if versao == '3.10':
+            nota = NFe_310()
+            protNFe = ProtNFe_310()
+            proc = ProcNFe_310()
+        else:
+            nota = NFe_200()
+            protNFe = ProtNFe_200()
+            proc = ProcNFe_200()
         nota.xml = nfe
-        protNFe = ProtNFe_200()
         resp = minidom.parseString(nfe.encode('utf-8'))
         resp = resp.getElementsByTagName("protNFe")[0]
         resposta = resp.toxml()
         protNFe.xml = resposta
-        proc = ProcNFe_200()
         proc.protNFe = protNFe
 
         d.NFe = nota
         d.protNFe = protNFe
+        d.versao = versao
         d.salvar_arquivo = False
         d.obs_impressao = u'DANFE gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
         d.nome_sistema = nome_sistema
@@ -445,7 +461,8 @@ class nf_e(object):
         p = ProcessadorNFe()
         p.versao = versao
         p.estado = estado
-        #Provisoriamente apontado para um estado que usa o webservice de ambiente nacional, pois em MG ainda não existe suporte ao Manifesto do Destinatário
+        #Provisoriamente apontado para um estado que usa o webservice de ambiente nacional,
+        # pois em MG ainda não existe suporte ao Manifesto do Destinatário
         ESTADO_WS[estado] = SVAN
         p.ambiente = ambiente
         p.certificado.cert_str = cert
@@ -480,7 +497,8 @@ class nf_e(object):
         p = ProcessadorNFe()
         p.versao = versao
         p.estado = estado
-        #Provisoriamente apontado para um estado que usa o webservice de ambiente nacional, pois em MG ainda não existe suporte ao Manifesto do Destinatário
+        #Provisoriamente apontado para um estado que usa o webservice de ambiente nacional, pois em MG ainda
+        # não existe suporte ao Manifesto do Destinatário
         ESTADO_WS[estado] = SVAN
         p.ambiente = ambiente
         p.certificado.cert_str = cert
