@@ -61,6 +61,7 @@ from danfe.danferetrato import *
 
 from StringIO import StringIO
 import pytz
+import tempfile
 
 
 class ProcessoNFe(object):
@@ -169,17 +170,17 @@ class ProcessadorNFe(object):
         #
         self.caminho_temporario = self.caminho_temporario or u'/tmp/'
 
-        nome_arq_chave = self.caminho_temporario + uuid4().hex
-        arq_tmp = open(nome_arq_chave, 'w')
-        arq_tmp.write(self.certificado.chave)
-        arq_tmp.close()
 
-        nome_arq_certificado = self.caminho_temporario + uuid4().hex
-        arq_tmp = open(nome_arq_certificado, 'w')
-        arq_tmp.write(self.certificado.certificado)
-        arq_tmp.close()
+        nome_arq_chave = tempfile.NamedTemporaryFile('w')
+        nome_arq_chave.write(self.certificado.chave)
+        nome_arq_chave.flush()
 
-        con = HTTPSConnection(self._servidor, key_file=nome_arq_chave, cert_file=nome_arq_certificado)
+        nome_arq_certificado = tempfile.NamedTemporaryFile('w')
+        nome_arq_certificado.write(self.certificado.certificado)
+        nome_arq_certificado.flush()
+
+
+        con = HTTPSConnection(self._servidor, key_file=nome_arq_chave.name, cert_file=nome_arq_certificado.name)
         #con = ConexaoHTTPS(self._servidor, key_file=nome_arq_chave, cert_file=nome_arq_certificado)
         con.request(u'POST', u'/' + self._url, self._soap_envio.xml.encode(u'utf-8'), self._soap_envio.header)
         resp = con.getresponse()
@@ -191,8 +192,9 @@ class ProcessadorNFe(object):
         # apenas o uso do certificado para validar a identidade, independente
         # da existência de assinatura digital
         #
-        os.remove(nome_arq_chave)
-        os.remove(nome_arq_certificado)
+
+        nome_arq_chave.close()
+        nome_arq_certificado.close()
 
         # Dados da resposta salvos para possível debug
         self._soap_retorno.resposta.version  = resp.version
