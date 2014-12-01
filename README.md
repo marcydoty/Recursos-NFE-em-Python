@@ -17,17 +17,27 @@ pip install https://github.com/marcydoty/Recursos-NFE-em-Python/tarball/master
 Dependencies
 ------------
 
+### System libs
+
 - [SUDS](https://fedorahosted.org/suds/)
-- [lxml](http://lxml.de/)
 - [libxml2](http://xmlsoft.org/)
 - [openssl](https://www.openssl.org/)
 - [XmlSEC](https://www.aleksey.com/xmlsec/)
-- [Pyxmlsec](http://pyxmlsec.labs.libre-entreprise.org/)
 
+### Python libs
+
+- [pyxmlsec](http://pyxmlsec.labs.libre-entreprise.org/)
+- [lxml](http://lxml.de/)
+
+To install python dependencies run:
+
+```bash
+pip install -r requirements.txt
+```
 
 License GPLv3
 -------
-Webservice interface to [NFE](http://www.nfe.fazenda.gov.br) in python
+Webservice interface to [NFE](http://www.nfe.fazenda.gov.br) in Python.
 Copyright (C) 2011-2014  Marcilene Ribeiro <mrasistemas@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
