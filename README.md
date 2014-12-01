@@ -1,6 +1,8 @@
 Recursos-NFE
 ============
 
+[![Build Status](https://travis-ci.org/marcwebbie/Recursos-NFE-em-Python.svg)](https://travis-ci.org/marcwebbie/Recursos-NFE-em-Python)
+
 Biblioteca de interface com o webservice de Nota Fiscal Eletrônica,
 da SEFAZ, oficializada pelo Ministério da Fazenda do Governo do
 Brasil.
@@ -26,8 +28,10 @@ Dependencies
 
 ### Python libs
 
+- [geraldo](https://github.com/marinho/geraldo)
 - [pyxmlsec](http://pyxmlsec.labs.libre-entreprise.org/)
 - [lxml](http://lxml.de/)
+- [pyOpenSSL](https://pypi.python.org/pypi/pyOpenSSL)
 
 To install python dependencies run:
 
