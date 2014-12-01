@@ -1,5 +1,5 @@
-Visão Geral
------------
+Recursos-NFE
+============
 
 Biblioteca de interface com o webservice de Nota Fiscal Eletrônica,
 da SEFAZ, oficializada pelo Ministério da Fazenda do Governo do
@@ -7,26 +7,29 @@ Brasil.
 
 A NF-e visa substituir as notas fiscais séries 1 e 1A
 
-Dependências
+Quickstart
+----------
+
+```python
+pip install https://github.com/marcydoty/Recursos-NFE-em-Python/tarball/master
+```
+
+Dependencies
 ------------
 
-- SUDS (https://fedorahosted.org/suds/)
-  - para consumir o webservice SOAP/WSDL
+- [SUDS](https://fedorahosted.org/suds/)
 - lxml
-  - biblioteca de leitura e gravação de arquivos XML, de alta
-    performance e fácil de implementar.
 - libxml2
-  - outra biblioteca XML, mais rápida, escrita em C
 - openssl
-  - abertura e conversão dos certificados
 - XmlSEC
-  - assinatura e validação do XML
 - Pyxmlsec
-  - adaptador Python para a XmlSEC
 
-------------------------------------------------------------------------
-The refactoring about the PySPED  support come from Aristides Caldeira
-With contributions from Alan Justino
+
+License GPLv3
+-------
+Webservice interface to [NFE](http://www.nfe.fazenda.gov.br) in python
+Copyright (C) 2011-2014  Marcilene Ribeiro <mrasistemas@gmail.com>
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -39,6 +42,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-Development: Marcilene Ribeiro
-http://www.sigsolucoes.net.br
