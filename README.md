@@ -18,11 +18,11 @@ Dependencies
 ------------
 
 - [SUDS](https://fedorahosted.org/suds/)
-- lxml
-- libxml2
-- openssl
-- XmlSEC
-- Pyxmlsec
+- [lxml](http://lxml.de/)
+- [libxml2](http://xmlsoft.org/)
+- [openssl](https://www.openssl.org/)
+- [XmlSEC](https://www.aleksey.com/xmlsec/)
+- [Pyxmlsec](http://pyxmlsec.labs.libre-entreprise.org/)
 
 
 License GPLv3
