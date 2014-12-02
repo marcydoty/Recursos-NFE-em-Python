@@ -1,0 +1,2 @@
+class NotaFiscalEletronica(object):
+    pass
