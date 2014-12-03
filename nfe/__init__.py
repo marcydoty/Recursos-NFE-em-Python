@@ -1,5 +1,5 @@
 import nfe
-from nfe import nota_fiscal
+from nfe import notafiscal
 
 __version__ = 3.8
 __license__ = 'GNU Lesser General Public License (LGPLv2.1)'
