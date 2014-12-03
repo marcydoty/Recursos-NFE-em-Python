@@ -4,8 +4,9 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import nfe
+from nfe.nota_fiscal import NotaFiscal
 
 class NfeTests(unittest.TestCase):
     def test_nfe_instantiation(self):
-        new_nfe = nfe.nf_e()
+        new_nfe = NotaFiscal()
         self.assertIsNotNone(new_nfe)
