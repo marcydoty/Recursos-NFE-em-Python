@@ -12,7 +12,7 @@ from nfe.pysped.xml_sped.certificado import Certificado
 from nfe.pysped.nfe.webservices_2 import ESTADO_WS, SVAN, SVRS, UFRS, NFE_AMBIENTE_PRODUCAO
 FILE_DIR = abspath(dirname(__file__))
 
-class nf_e(object):
+class NotaFiscal(object):
     """
     Especialização da biblioteca pysped.
     @author: Marcilene Ribeiro

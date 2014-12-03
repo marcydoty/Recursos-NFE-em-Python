@@ -1,8 +1,8 @@
 import nfe
-from nfe import nf_e
+from nfe import nota_fiscal
 
 __version__ = 3.8
-__license__ = 'GNU Lesser General Public License (LGPL)'
+__license__ = 'GNU Lesser General Public License (LGPLv2.1)'
 __url__ = 'http://github.com/marcydoty/Recursos-NFE-em-Python'
 
 # if not geraldo.__version__=='0.4.10-stable_sig':

@@ -8,7 +8,7 @@ setup(
     author="Marcilene Ribeiro",
     author_email="marcilene@sigsolucoes.net.br",
     description=("Biblioteca para implementacao de notas fiscais eletronicas"),
-    license="LGPL",
+    license="LGPLv2.1",
     keywords="NF-e",
     url="http://github.com/marcydoty",
     packages=find_packages(),
