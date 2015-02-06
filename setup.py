@@ -3,7 +3,7 @@ import os
 
 setup(
     name="python-nfe",
-    version="3.8",
+    version="3.9",
     include_package_data=True,
     author="Marcilene Ribeiro",
     author_email="marcilene@sigsolucoes.net.br",

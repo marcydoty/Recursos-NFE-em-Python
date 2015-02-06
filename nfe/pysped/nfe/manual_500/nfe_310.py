@@ -1112,7 +1112,7 @@ class Ide(nfe_200.Ide):
         self.dEmi    = TagData(nome=u'dEmi'       , codigo=u'B09',                      raiz=u'//NFe/infNFe/ide',obrigatorio=False)
 
         self.dhEmi    = TagDataHoraUTC(nome=u'dhEmi'       , codigo=u'B09',                      raiz=u'//NFe/infNFe/ide')
-        self.dhSaiEnt  = TagDataHoraUTC(nome=u'dhSaiEnt'       , codigo=u'B10',                      raiz=u'//NFe/infNFe/ide')
+        self.dhSaiEnt  = TagDataHoraUTC(nome=u'dhSaiEnt'       , codigo=u'B10',                      raiz=u'//NFe/infNFe/ide', obrigatorio=False)
         self.hSaiEnt = TagDataHoraUTC(nome=u'hSaiEnt'    , codigo=u'B10a',                     raiz=u'//NFe/infNFe/ide', obrigatorio=False)
         self.idDest   = TagInteiro(nome=u'idDest'      , codigo=u'B11a', tamanho=[ 1,  1, 1], raiz=u'//NFe/infNFe/ide', valor=1)
         self.indFinal = TagCaracter(nome=u'indFinal'   , codigo=u'B25a',                      raiz=u'//NFe/infNFe/ide', valor=u'0')
