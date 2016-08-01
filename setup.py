@@ -6,7 +6,7 @@ setup(
     version="3.8",
     include_package_data=True,
     author="Marcilene Ribeiro",
-    author_email="marcilene@sigsolucoes.net.br",
+    author_email="mrasistemas@gmail.com",
     description=("Biblioteca para implementacao de notas fiscais eletronicas"),
     license="LGPL",
     keywords="NF-e",
