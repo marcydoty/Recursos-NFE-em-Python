@@ -65,7 +65,7 @@ class nf_e(object):
         p.salvar_arquivos = False
         p.tipo_contingencia = tipo_contingencia
         p.caminho = u''
-        processo = p.consultar_servico()
+        processo, novos_arquivos = p.consultar_servico()
         status = processo.resposta.cStat.valor
         processo.envio.xml
         processo.resposta.xml
