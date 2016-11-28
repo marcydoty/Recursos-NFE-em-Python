@@ -423,11 +423,13 @@ class nf_e(object):
         p = ProcessadorNFe()
         p.versao = versao
         p.estado = estado
-        if uf in ('AC', 'RN', 'PB', 'SC', 'AC', 'AL', 'AP', 'DF', 'PB', 'RJ', 'RN', 'RO', 'RR',
-                  'SC', 'SE', 'TO'):
-            SVRS[NFE_AMBIENTE_PRODUCAO][u'servidor'] = u'svp-ws.sefazvirtual.rs.gov.br'
+        if uf in ('AC', 'AL', 'AP', 'DF', 'ES', 'PB', 'RJ', 'RN', 'RO', 'RR', 'SC',
+                  'SE', 'TO'):
+            #SVRS[NFE_AMBIENTE_PRODUCAO][u'servidor'] = u'svp-ws.sefazvirtual.rs.gov.br'
+            SVRS[NFE_AMBIENTE_PRODUCAO][u'servidor'] = u'cad.svrs.rs.gov.br'
         if uf == 'RS':
-            UFRS[NFE_AMBIENTE_PRODUCAO][u'servidor'] = u'sef.sefaz.rs.gov.br'
+            #UFRS[NFE_AMBIENTE_PRODUCAO][u'servidor'] = u'sef.sefaz.rs.gov.br'
+            UFRS[NFE_AMBIENTE_PRODUCAO][u'servidor'] = u'cad.sefazrs.rs.gov.br'
         p.ambiente = ambiente
         p.certificado.cert_str = cert
         p.certificado.key_str = key

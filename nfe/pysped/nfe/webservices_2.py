@@ -49,9 +49,7 @@ METODO_WS = {
     }
 }
 
-#nfeConsultaNF2
 SVRS = {
-
     NFE_AMBIENTE_PRODUCAO: {
         u'servidor'            : u'nfe.sefazvirtual.rs.gov.br',
         WS_NFE_ENVIO_LOTE        : u'ws/nferecepcao/NfeRecepcao2.asmx',
@@ -92,7 +90,8 @@ SVAN = {
         WS_NFE_SITUACAO        : u'NFeStatusServico2/NFeStatusServico2.asmx'
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        u'servidor'            : u'hom.nfe.fazenda.gov.br',
+        #u'servidor'            : u'hom.nfe.fazenda.gov.br',
+        u'servidor'            : u'hom.sefazvirtual.fazenda.gov.br',
         WS_NFE_ENVIO_LOTE      : u'NfeRecepcao2/NfeRecepcao2.asmx',
         WS_NFE_CONSULTA_RECIBO : u'NFeRetRecepcao2/NFeRetRecepcao2.asmx',
         WS_NFE_CANCELAMENTO    : u'NFeCancelamento2/NFeCancelamento2.asmx',
@@ -250,6 +249,8 @@ UFCE = {
         WS_NFE_CONSULTA         : u'nfe2/services/NfeConsulta2',
         WS_NFE_SITUACAO         : u'nfe2/services/NfeStatusServico2',
         WS_NFE_CONSULTA_CADASTRO: u'nfe2/services/CadConsultaCadastro2',
+        WS_NFE_DOWNLOAD_XML_DESTINATARIO: u'nfe2/services/NfeDownloadNF',
+        WS_NFE_EVENTO           : u'/nfe2/services/RecepcaoEvento',
 #        WS_NFE_RECEPCAO_EVENTO  : 'nfe2/services/RecepcaoEvento',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
@@ -261,6 +262,8 @@ UFCE = {
         WS_NFE_CONSULTA         : u'nfe2/services/NfeConsulta2',
         WS_NFE_SITUACAO         : u'nfe2/services/NfeStatusServico2',
         WS_NFE_CONSULTA_CADASTRO: u'nfe2/services/CadConsultaCadastro2',
+        WS_NFE_DOWNLOAD_XML_DESTINATARIO: u'nfe2/services/NfeDownloadNF',
+        WS_NFE_EVENTO           : u'/nfe2/services/RecepcaoEvento',
 #        WS_NFE_RECEPCAO_EVENTO  : 'nfe2/services/RecepcaoEvento',
         }
 }
@@ -298,7 +301,7 @@ UFGO = {
         WS_NFE_INUTILIZACAO     : u'nfe/services/v2/NfeInutilizacao2',
         WS_NFE_CONSULTA         : u'nfe/services/v2/NfeConsulta2',
         WS_NFE_SITUACAO         : u'nfe/services/v2/NfeStatusServico2',
-        WS_NFE_CONSULTA_CADASTRO: u'nfe/services/v2/CadConsultaCadastro2?wsdl',
+        WS_NFE_CONSULTA_CADASTRO: u'nfe/services/v2/CadConsultaCadastro2',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
         u'servidor'             : u'homolog.sefaz.go.gov.br',
@@ -347,6 +350,7 @@ UFMS = {
         WS_NFE_CONSULTA         : u'producao/services2/NfeConsulta2',
         WS_NFE_SITUACAO         : u'producao/services2/NfeStatusServico2',
         WS_NFE_CONSULTA_CADASTRO: u'producao/services2/CadConsultaCadastro2',
+        WS_NFE_EVENTO           : u'producao/services2/RecepcaoEvento',
 #        WS_NFE_RECEPCAO_EVENTO  : 'producao/services2/RecepcaoEvento',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
@@ -357,7 +361,7 @@ UFMS = {
         WS_NFE_INUTILIZACAO     : u'homologacao/services2/NfeInutilizacao2',
         WS_NFE_CONSULTA         : u'homologacao/services2/NfeConsulta2',
         WS_NFE_SITUACAO         : u'homologacao/services2/NfeStatusServico2',
-        WS_NFE_CONSULTA_CADASTRO: u'homologacao/services2/CadConsultaCadastro2',
+        WS_NFE_EVENTO           : u'homologacao/services2/RecepcaoEvento',
 #        WS_NFE_RECEPCAO_EVENTO  : 'homologacao/services2/RecepcaoEvento',
         }
 }
@@ -400,7 +404,8 @@ UFPR = {
         WS_NFE_INUTILIZACAO     : u'nfe/NFeInutilizacao2',
         WS_NFE_CONSULTA         : u'nfe/NFeConsulta2',
         WS_NFE_SITUACAO         : u'nfe/NFeStatusServico2',
-        WS_NFE_CONSULTA_CADASTRO: u'nfe/CadConsultaCadastro2?wsdl',
+        WS_NFE_CONSULTA_CADASTRO: u'nfe/CadConsultaCadastro2',
+        WS_NFE_EVENTO           : u'nfe-evento/NFeRecepcaoEvento',
 #        WS_NFE_RECEPCAO_EVENTO  : 'nfe-evento/NFeRecepcaoEvento',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
@@ -410,7 +415,8 @@ UFPR = {
         WS_NFE_CANCELAMENTO     : u'nfe/NFeCancelamento2',
         WS_NFE_INUTILIZACAO     : u'nfe/NFeInutilizacao2',
         WS_NFE_CONSULTA         : u'nfe/NFeConsulta2',
-        WS_NFE_SITUACAO         : u'nfe/NFeStatusServico2'
+        WS_NFE_SITUACAO         : u'nfe/NFeStatusServico2',
+        WS_NFE_EVENTO           : u'nfe-evento/NFeRecepcaoEvento'
     }
 }
 
@@ -424,6 +430,7 @@ UFPE = {
         WS_NFE_CONSULTA         : u'nfe-service/services/NfeConsulta2',
         WS_NFE_SITUACAO         : u'nfe-service/services/NfeStatusServico2',
         WS_NFE_CONSULTA_CADASTRO: u'nfe-service/services/CadConsultaCadastro2',
+        WS_NFE_EVENTO           : u'nfe-service/services/RecepcaoEvento',
 #        WS_NFE_RECEPCAO_EVENTO  : 'nfe-service/services/RecepcaoEvento',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
@@ -435,6 +442,7 @@ UFPE = {
         WS_NFE_CONSULTA         : u'nfe-service/services/NfeConsulta2',
         WS_NFE_SITUACAO         : u'nfe-service/services/NfeStatusServico2',
         WS_NFE_CONSULTA_CADASTRO: u'nfe-service/services/CadConsultaCadastro2',
+        WS_NFE_EVENTO           : u'nfe-service/services/RecepcaoEvento',
 #        WS_NFE_RECEPCAO_EVENTO  : 'nfe-service/services/RecepcaoEvento',
     }
 }
@@ -442,7 +450,8 @@ UFPE = {
 
 UFRS = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'              : u'nfe.sefaz.rs.gov.br',
+        #'servidor'              : u'nfe.sefaz.rs.gov.br',
+        'servidor'              : u'nfe.sefazrs.rs.gov.br',
         WS_NFE_ENVIO_LOTE       : u'ws/Nferecepcao/NfeRecepcao2.asmx',
         WS_NFE_CONSULTA_RECIBO  : u'ws/NfeRetRecepcao/NfeRetRecepcao2.asmx',
         WS_NFE_CANCELAMENTO     : u'ws/NfeCancelamento/NfeCancelamento2.asmx',
@@ -450,10 +459,12 @@ UFRS = {
         WS_NFE_CONSULTA         : u'ws/NfeConsulta/NfeConsulta2.asmx',
         WS_NFE_SITUACAO         : u'ws/NfeStatusServico/NfeStatusServico2.asmx',
         WS_NFE_CONSULTA_CADASTRO: u'ws/cadconsultacadastro/cadconsultacadastro2.asmx',
+        WS_NFE_EVENTO           : u'ws/recepcaoevento/recepcaoevento.asmx',
 #        WS_NFE_RECEPCAO_EVENTO  : 'ws/recepcaoevento/recepcaoevento.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'             : u'homologacao.nfe.sefaz.rs.gov.br',
+        #'servidor'             : u'homologacao.nfe.sefaz.rs.gov.br',
+        'servidor'             : u'nfe-homologacao.sefazrs.rs.gov.br',
         WS_NFE_ENVIO_LOTE       : u'ws/Nferecepcao/NfeRecepcao2.asmx',
         WS_NFE_CONSULTA_RECIBO  : u'ws/NfeRetRecepcao/NfeRetRecepcao2.asmx',
         WS_NFE_CANCELAMENTO     : u'ws/NfeCancelamento/NfeCancelamento2.asmx',
@@ -461,6 +472,7 @@ UFRS = {
         WS_NFE_CONSULTA         : u'ws/NfeConsulta/NfeConsulta2.asmx',
         WS_NFE_SITUACAO         : u'ws/NfeStatusServico/NfeStatusServico2.asmx',
         WS_NFE_CONSULTA_CADASTRO: u'ws/cadconsultacadastro/cadconsultacadastro2.asmx',
+        WS_NFE_EVENTO           : u'ws/recepcaoevento/recepcaoevento.asmx',
 #        WS_NFE_RECEPCAO_EVENTO  : 'ws/recepcaoevento/recepcaoevento.asmx',
     }
 }
@@ -497,7 +509,8 @@ UFSP = {
         WS_NFE_INUTILIZACAO     : u'nfeweb/services/nfeinutilizacao2.asmx',
         WS_NFE_CONSULTA         : u'nfeweb/services/nfeconsulta2.asmx',
         WS_NFE_SITUACAO         : u'nfeweb/services/nfestatusservico2.asmx',
-        WS_NFE_CONSULTA_CADASTRO: u'nfeweb/services/cadconsultacadastro2.asmx',
+        WS_NFE_CONSULTA_CADASTRO: u'ws/cadconsultacadastro2.asmx',
+        #WS_NFE_CONSULTA_CADASTRO: u'nfeweb/services/cadconsultacadastro2.asmx',
 #        WS_NFE_RECEPCAO_EVENTO  : 'eventosWEB/services/RecepcaoEvento.asmx',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
@@ -513,27 +526,27 @@ UFSP = {
 }
 
 '''
+Verificado em: 24/11/2016
+Fonte: http://www.nfe.fazenda.gov.br/portal/WebServices.aspx
+
 Producao
 Sefaz Virtual de Contingência Ambiente Nacional - (SVC-AN)
-Data: 10-09-2014
+Serviço	Versão	URL
 RecepcaoEvento	1.00	https://www.svc.fazenda.gov.br/RecepcaoEvento/RecepcaoEvento.asmx
-NfeRecepcao	2.00	https://www.svc.fazenda.gov.br/NfeRecepcao2/NfeRecepcao2.asmx
-NfeRetRecepcao	2.00	https://www.svc.fazenda.gov.br/NfeRetRecepcao2/NfeRetRecepcao2.asmx
-NfeConsultaProtocolo	2.00 / 3.10	https://www.svc.fazenda.gov.br/NfeConsulta2/NfeConsulta2.asmx
-NfeStatusServico	2.00 / 3.10	https://www.svc.fazenda.gov.br/NfeStatusServico2/NfeStatusServico2.asmx
+NfeConsultaProtocolo	3.10	https://www.svc.fazenda.gov.br/NfeConsulta2/NfeConsulta2.asmx
+NfeStatusServico	3.10	https://www.svc.fazenda.gov.br/NfeStatusServico2/NfeStatusServico2.asmx
 NFeAutorizacao	3.10	https://www.svc.fazenda.gov.br/NfeAutorizacao/NfeAutorizacao.asmx
 NFeRetAutorizacao	3.10	https://www.svc.fazenda.gov.br/NfeRetAutorizacao/NfeRetAutorizacao.asmx
 
 Homologacao
-SVC-AN
-• https://hom.svc.fazenda.gov.br/NfeRecepcao2/NfeRecepcao2.asmx
-• https://hom.svc.fazenda.gov.br/NfeRetRecepcao2/NfeRetRecepcao2.asmx
-• https://hom.svc.fazenda.gov.br/NfeInutilizacao2/NfeInutilizacao2.asmx
-• https://hom.svc.fazenda.gov.br/NfeConsulta2/NfeConsulta2.asmx
-• https://hom.svc.fazenda.gov.br/NfeStatusServico2/NfeStatusServico2.asmx
-• https://hom.svc.fazenda.gov.br/RecepcaoEvento/RecepcaoEvento.asmx
+Sefaz Virtual de Contingência Ambiente Nacional - (SVC-AN)
+Serviço	Versão	URL
+RecepcaoEvento	1.00	https://hom.svc.fazenda.gov.br/RecepcaoEvento/RecepcaoEvento.asmx
+NfeConsultaProtocolo	3.10	https://hom.svc.fazenda.gov.br/NfeConsulta2/NfeConsulta2.asmx
+NfeStatusServico	3.10	https://hom.svc.fazenda.gov.br/NfeStatusServico2/NfeStatusServico2.asmx
+NFeAutorizacao	3.10	https://hom.svc.fazenda.gov.br/NfeAutorizacao/NfeAutorizacao.asmx
+NFeRetAutorizacao	3.10	https://hom.svc.fazenda.gov.br/NfeRetAutorizacao/NfeRetAutorizacao.asmx
 '''
-
 
 SVC_AN = {
     NFE_AMBIENTE_PRODUCAO: {
@@ -558,33 +571,34 @@ SVC_AN = {
     }
 }
 
-
 '''
-Producao
+SVC-RS
+Verificado em: 24/11/2016
+Fonte: http://www.nfe.fazenda.gov.br/portal/WebServices.aspx
 
+Producao
 Sefaz Virtual de Contingência Rio Grande do Sul - (SVC-RS)
-Data: 10-09-2014
-RecepcaoEvento	1.00	https://nfe.sefazvirtual.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx
-NfeRecepcao	2.00	https://nfe.sefazvirtual.rs.gov.br/ws/Nferecepcao/NFeRecepcao2.asmx
-NfeRetRecepcao	2.00	https://nfe.sefazvirtual.rs.gov.br/ws/NfeRetRecepcao/NfeRetRecepcao2.asmx
-NfeConsultaProtocolo	2.00 / 3.10	https://nfe.sefazvirtual.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx
-NfeStatusServico	2.00 / 3.10	https://nfe.sefazvirtual.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx
-NFeAutorizacao	3.10	https://nfe.sefazvirtual.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
-NFeRetAutorizacao	3.10	https://nfe.sefazvirtual.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx
+Serviço	Versão	URL
+RecepcaoEvento	1.00	https://nfe.svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx
+NfeConsultaProtocolo	3.10	https://nfe.svrs.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx
+NfeStatusServico	3.10	https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx
+NFeAutorizacao	3.10	https://nfe.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
+NFeRetAutorizacao	3.10	https://nfe.svrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx
 
 Homologacao
-SVC-RS (mesmos endereços da SVRS)
-• https://homologacao.nfe.sefazvirtual.rs.gov.br/ws/Nferecepcao/NFeRecepcao2.asmx
-• https://homologacao.nfe.sefazvirtual.rs.gov.br/ws/NfeRetRecepcao/NfeRetRecepcao2.asmx
-• https://homologacao.nfe.sefaz.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx
-• https://homologacao.nfe.sefazvirtual.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx
-• https://homologacao.nfe.sefazvirtual.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx
+Sefaz Virtual de Contingência Rio Grande do Sul - (SVC-RS)
+Serviço	Versão	URL
+RecepcaoEvento	1.00	https://nfe-homologacao.svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx
+NfeConsultaProtocolo	3.10	https://nfe-homologacao.svrs.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx
+NfeStatusServico	3.10	https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx
+NFeAutorizacao	3.10	https://nfe-homologacao.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
+NFeRetAutorizacao	3.10	https://nfe-homologacao.svrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx
 '''
-
 
 SVC_RS = {
     NFE_AMBIENTE_PRODUCAO: {
         u'servidor'            : u'nfe.sefazvirtual.rs.gov.br',
+        #u'servidor'            : u'nfe.svrs.rs.gov.br',
         WS_NFE_ENVIO_LOTE      : u'ws/Nferecepcao/NFeRecepcao2.asmx',
         WS_NFE_CONSULTA_RECIBO : u'ws/NfeRetRecepcao/NfeRetRecepcao2.asmx',
         WS_NFE_EVENTO          : u'ws/recepcaoevento/recepcaoevento.asmx',
@@ -593,6 +607,7 @@ SVC_RS = {
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
         u'servidor'            : u'homologacao.nfe.sefazvirtual.rs.gov.br',
+        #u'servidor'            : u'nfe-homologacao.svrs.rs.gov.br',
         WS_NFE_ENVIO_LOTE      : u'ws/Nferecepcao/NFeRecepcao2.asmx',
         WS_NFE_CONSULTA_RECIBO : u'ws/NfeRetRecepcao/NfeRetRecepcao2.asmx',
         WS_NFE_EVENTO          : u'ws/recepcaoevento/recepcaoevento.asmx',
@@ -601,20 +616,18 @@ SVC_RS = {
     }
 }
 
-#
-# Informação obtida em
-# http://www.nfe.fazenda.gov.br/portal/VerificacaoDeServicos/VerificacaoServicos.aspx
-#  Última verificação: 07/04/2010 16:30:14
-#  * Estados Emissores pela Sefaz Virtual RS (Rio Grande do Sul): AC, AL, AM, AP, DF, MS, PB, RJ, RO, RR, SC, SE e TO.
-#  ** Estados Emissores pela Sefaz Virtual AN (Ambiente Nacional): CE, ES, MA, PA, PI e RN.
-# Estados que têm seus próprios servidores: BA, GO, MG, MT, PE, PR, SP.
-#
+'''
+http://www.nfe.fazenda.gov.br/portal/WebServices.aspx
+Verificado em: 26/11/2016
 
-
-# UF que utilizam a SVAN - Sefaz Virtual do Ambiente Nacional: ES, MA, PA, PI
-# UF que utilizam a SVRS - Sefaz Virtual do RS: - Para serviço de Consulta Cadastro: AC, RN, PB, SC
-# - Para demais serviços relacionados com o sistema da NF-e: AC, AL, AP, DF, PB, RJ, RN, RO, RR, SC, SE, TO
-# Autorizadores: AM BA CE ES GO MG MS MT PE PR RS SP SVAN SVRS SCAN AN
+UF que utilizam a SVAN - Sefaz Virtual do Ambiente Nacional: MA, PA, PI 
+UF que utilizam a SVRS - Sefaz Virtual do RS: 
+- Para serviço de Consulta Cadastro: AC, RN, PB, SC 
+- Para demais serviços relacionados com o sistema da NF-e: AC, AL, AP, DF, ES, PB, RJ, RN, RO, RR, SC, SE, TO 
+Autorizadores em contingência: 
+- UF que utilizam a SVC-AN - Sefaz Virtual de Contingência Ambiente Nacional: AC, AL, AP, DF, ES, MG, PB, RJ, RN, RO, RR, RS, SC, SE, SP, TO 
+- UF que utilizam a SVC-RS - Sefaz Virtual de Contingência Rio Grande do Sul: AM, BA, CE, GO, MA, MS, MT, PA, PE, PI, PR
+'''
 
 ESTADO_WS = {
     u'AC': SVRS,
@@ -624,7 +637,8 @@ ESTADO_WS = {
     u'BA': UFBA,
     u'CE': UFCE,
     u'DF': SVRS,
-    u'ES': SVAN,
+    #u'ES': SVAN,
+    u'ES': SVRS,
     u'GO': UFGO,
     u'MA': SVAN,
     u'MG': UFMG,
@@ -637,7 +651,8 @@ ESTADO_WS = {
     u'PI': SVAN,
     u'PR': UFPR,
     u'RJ': SVRS,
-    u'RN': SVAN,
+    #u'RN': SVAN,
+    u'RN': SVRS,
     u'RO': SVRS,
     u'RR': SVRS,
     u'RS': UFRS,
