@@ -6,11 +6,16 @@ from nfe.pysped.xml_sped import *
 from nfe.pysped.nfe.manifestacao_destinatario import ESQUEMA_ATUAL
 import os
 
-
 DIRNAME = os.path.dirname(__file__)
 
-
-
+class TagChNFe(TagCaracter):
+    def __init__(self, *args, **kwargs):
+        super(TagChNFe, self).__init__(*args, **kwargs)
+        self.nome = 'chNFe'
+        self.codigo = 'JP06',
+        self.tamanho = [44, 44]
+        self.raiz = '//downloadNFe'
+        
 class DownloadNFe(XMLNFe):
     def __init__(self):
         super(DownloadNFe, self).__init__()
@@ -18,7 +23,8 @@ class DownloadNFe(XMLNFe):
         self.tpAmb = TagInteiro(nome=u'tpAmb'   , codigo=u'JP03', tamanho=[ 1,  1, 1] , raiz=u'//downloadNFe')
         self.xServ =  TagCaracter(nome=u'xServ', codigo=u'JP04' , tamanho=[12, 12, 12]     , raiz=u'//downloadNFe',valor=u'DOWNLOAD NFE')
         self.CNPJ = TagCaracter(nome=u'CNPJ'   , codigo=u'JP05' , tamanho=[ 0, 14]   , raiz=u'//downloadNFe')
-        self.chNFe = TagCaracter(nome=u'chNFe'   , codigo=u'JP06', tamanho=[44, 44, 44], raiz=u'//downloadNFe')
+        #self.chNFe = TagCaracter(nome=u'chNFe'   , codigo=u'JP06', tamanho=[44, 44, 44], raiz=u'//downloadNFe')
+        self.chNFe = []
         self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'downloadNFe_v1.00.xsd'
 
@@ -30,7 +36,10 @@ class DownloadNFe(XMLNFe):
         xml += self.tpAmb.xml
         xml += self.xServ.xml
         xml += self.CNPJ.xml
-        xml += self.chNFe.xml
+        #xml += self.chNFe.xml
+        for chave in self.chNFe:
+            xml += chave.xml
+        
         xml += u'</downloadNFe>'
         return xml
 
@@ -40,7 +49,8 @@ class DownloadNFe(XMLNFe):
             self.tpAmb.xml  = arquivo
             self.xServ.xml = arquivo
             self.CNPJ.xml = arquivo
-            self.chNFe.xml = arquivo
+            #self.chNFe.xml = arquivo
+            self.chNFe = self.le_grupo('//downloadNFe/chNFe', TagChNFe)
 
 
     xml = property(get_xml, set_xml)
@@ -49,40 +59,26 @@ class DownloadNFe(XMLNFe):
 class ProcNFeGrupoZip(XMLNFe):
     def __init__(self):
         super(ProcNFeGrupoZip, self).__init__()
-        self.procNFeZip    = TagCaracter(nome=u'ProcNFeGrupoZip', codigo=u'JR12', tamanho=[15, 1000]    , raiz=u'//retNFe/ProcNFeGrupoZip', propriedade=u'procNFeZip', obrigatorio= False)
-        self.NFeZip = TagCaracter(nome=u'NFeZip'   , codigo=u'JR14', tamanho=[44, 44, 44], raiz=u'//retNFe/ProcNFeGrupoZip', obrigatorio= False)
-        self.protNFeZip = TagCaracter(nome=u'protNFeZip', codigo=u'JR15' ,  tamanho=[ 0, 30],raiz=u'//retNFe/ProcNFeGrupoZip', obrigatorio= False)
+        self.NFeZip = TagCaracter(nome='NFeZip', codigo='JR13', raiz='//retNFe/procNFeGrupoZip')
+        self.protNFeZip = TagCaracter(nome='protNFeZip', codigo='JR14', raiz='//retNFe/procNFeGrupoZip')
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += self.procNFeZip.xml
-        xml += self.NFeZip.xml
-        xml += self.protNFeZip.xml
-        if  self.protNFeZip.xml:
-            xml += u'</ProcNFeGrupoZip>'
+
+        if self.NFeZip.valor and self.protNFeZip.valor:
+            xml += '<procNFeGrupoZip>'
+            xml += self.NFeZip.xml
+            xml += self.protNFeZip.xml
+            xml += '</procNFeGrupoZip>'
 
         return xml
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
-            self.procNFeZip.xml = arquivo
-            self.NFeZip.xml = arquivo
+            self.NFeZip.xml     = arquivo
             self.protNFeZip.xml = arquivo
 
     xml = property(get_xml, set_xml)
-
-
-#<retDownloadNFe versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>1</tpAmb><verAplic>RS20111129150959</verAplic><cStat>139</cStat><xMotivo>Pedido de download Processado</xMotivo><dhResp>2012-12-17T17:25:53</dhResp>
-#<retNFe>
-#<chNFe>43121203211158000142550010000125531144040128</chNFe><cStat>140</cStat><xMotivo>Download disponibilizado</xMotivo>
-#<procNFeGrupoZip>
-#<NFeZip>H4sIAAAAAAAEAO29B2AcS...</NFeZip>
-#<protNFeZip>H4sIAAAAAAAEAO29B2AcS...</protNFeZip>
-#</procNFeGrupoZip>
-#</retNFe></retDownloadNFe>
-
-
-
 
 
 class RetNFe(XMLNFe):
@@ -91,6 +87,9 @@ class RetNFe(XMLNFe):
         self.chNFe    = TagCaracter(nome=u'chNFe', codigo=u'JR08',  tamanho=[44, 44, 44], raiz=u'//retDownloadNFe/retNFe')
         self.cStat    = TagCaracter(nome=u'cStat'    , codigo=u'JR10' , tamanho=[3, 3, 3]   , raiz=u'//retDownloadNFe/retNFe')
         self.xMotivo  = TagCaracter(nome=u'xMotivo' , codigo=u'JR11' , tamanho=[1, 255]    , raiz=u'//retDownloadNFe/retNFe')
+        self.procNFeZip = TagCaracter(nome='procNFeZip', codigo='JR13', raiz='//retNFe', obrigatorio=False)
+        self.schema  = TagCaracter(nome='procNFe', propriedade='schema', raiz='//retNFe', obrigatorio=False)
+        self.procNFe  = TagCaracter(nome='procNFe', codigo='JR12', raiz='//retNFe', obrigatorio=False)
         self.procNFeGrupoZip = ProcNFeGrupoZip()
 
     def get_xml(self):
@@ -99,8 +98,15 @@ class RetNFe(XMLNFe):
         xml += self.chNFe.xml
         xml += self.cStat.xml
         xml += self.xMotivo.xml
-        if self.procNFeGrupoZip.xml:
-            xml += self.procNFeGrupoZip.xml
+        
+        if self.procNFe.valor:
+            xml += self.schema.xml
+            xml += self.procNFe.valor
+            xml += '</procNFe>'
+        
+        xml += self.procNFeZip.xml
+        xml += self.procNFeGrupoZip.xml
+        
         xml += u'</retNFe>'
 
         return xml
@@ -110,8 +116,19 @@ class RetNFe(XMLNFe):
             self.chNFe.xml = arquivo
             self.cStat.xml = arquivo
             self.xMotivo.xml = arquivo
-            if self.procNFeGrupoZip.xml:
-                self.procNFeGrupoZip.xml = arquivo
+            self.schema.xml  = arquivo
+            
+            procNFe = self._le_noh('//retNFe/procNFe')
+            if procNFe is not None and len(procNFe):
+                procNFe = etree.tostring(procNFe, encoding='unicode')
+                procNFe = procNFe.split('<')
+                procNFe = '<' + '<'.join(procNFe[2:-1])
+                self.procNFe.valor = procNFe
+            else:
+                self.procNFe.valor = ''
+
+            self.procNFeZip.xml = arquivo
+            self.procNFeGrupoZip.xml = arquivo
 
     xml = property(get_xml, set_xml)
 
@@ -124,13 +141,12 @@ class RetDownloadNFe(XMLNFe):
         self.cStat    = TagCaracter(nome=u'cStat'    , codigo=u'JR05' , tamanho=[3, 3, 3]   , raiz=u'//retDownloadNFe')
         self.xMotivo  = TagCaracter(nome=u'xMotivo' , codigo=u'JR06' , tamanho=[1, 255]    , raiz=u'//retDownloadNFe')
         self.dhResp = TagCaracter(nome=u'dhResp', codigo=u'JR07' ,  tamanho=[ 0, 30],raiz=u'//retDownloadNFe')
-        self.retNFe = RetNFe()
+        #self.retNFe = RetNFe()
+        self.retNFe = []
         self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'retDownloadNFe_v1.00.xsd'
 
     def get_xml(self):
-
-
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += self.versao.xml
@@ -139,7 +155,9 @@ class RetDownloadNFe(XMLNFe):
         xml += self.cStat.xml
         xml += self.xMotivo.xml
         xml += self.dhResp.xml
-        xml += self.retNFe.xml
+        #xml += self.retNFe.xml
+        for r in self.retNFe:
+            xml += r.xml
         xml += u'</retDownloadNFe>'
 
         return xml
@@ -152,7 +170,9 @@ class RetDownloadNFe(XMLNFe):
             self.cStat.xml = arquivo
             self.xMotivo.xml = arquivo
             self.dhResp.xml = arquivo
-            self.retNFe.xml = arquivo
+            #self.retNFe.xml = arquivo
+            self.retNFe = self.le_grupo('//retDownloadNFe/retNFe', RetNFe)
 
     xml = property(get_xml, set_xml)
+
 

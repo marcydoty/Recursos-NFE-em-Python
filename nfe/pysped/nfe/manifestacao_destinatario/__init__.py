@@ -25,3 +25,5 @@ from consnfedest import RetConsNFeDest as RetConsNFeDest_200
 
 from downloadNFe import DownloadNFe as DownloadNFe_200
 from downloadNFe import RetDownloadNFe as RetDownloadNFe_200
+
+from .downloadNFe import TagChNFe

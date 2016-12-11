@@ -52,6 +52,8 @@ from manual_500 import  EnvEventoCCe_310, RetEnvEventoCCe_310, ProcEventoNFeCCe_
 from manifestacao_destinatario import EnvConfRecebto_200, RetEnvConfRecebto_200
 from manifestacao_destinatario import ConsNFeDest_200, RetConsNFeDest_200, ProcEventoNFeRecebto_200
 from manifestacao_destinatario import DownloadNFe_200, RetDownloadNFe_200
+from .manifestacao_destinatario import TagChNFe
+
 from nfse import nfse_sete_lagoas
 from nfse import codservico
 #
@@ -441,23 +443,24 @@ class ProcessadorNFe(object):
         return processo
 
 
-    def download_nfe_xml(self, cnpj=None,ambiente=None, chave_nfe=None):
+    def download_nfe_xml(self, cnpj=None,ambiente=None, lista_chaves=[]):
         novos_arquivos = []
-        if self.versao == u'2.00':
-            envio = DownloadNFe_200()
-            resposta = RetDownloadNFe_200()
+        #if self.versao == u'2.00':
+        envio = DownloadNFe_200()
+        resposta = RetDownloadNFe_200()
 
         processo = ProcessoNFe(webservice=WS_NFE_DOWNLOAD_XML_DESTINATARIO, envio=envio, resposta=resposta)
 
         if ambiente is None:
             ambiente = self.ambiente
-
+        
         self.caminho = self.monta_caminho_nfe(ambiente=ambiente, chave_nfe=cnpj)
 
         #evento
         envio.tpAmb.valor = ambiente
         envio.CNPJ.valor = cnpj
-        envio.chNFe.valor = chave_nfe
+        #envio.chNFe.valor = chave_nfe
+        envio.chNFe = [TagChNFe(valor=ch) for ch in lista_chaves]
         envio.xServ.valor = u'DOWNLOAD NFE'
 
         self.certificado.prepara_certificado_arquivo_pfx()
