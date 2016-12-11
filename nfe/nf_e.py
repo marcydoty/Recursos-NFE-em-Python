@@ -570,11 +570,11 @@ class nf_e(object):
 
         return vals
 
-    def download_xml(self, cnpj, chave,  cert, key, versao=u'2.00', ambiente=2, estado=u'MG',
+    def download_xml(self, cnpj, lista_chaves,  cert, key, ambiente_nacional=True, versao=u'2.00', ambiente=2, estado=u'MG',
                      tipo_contingencia=False):
         """
             Realiza  a consulta do manifesto do destinatário
-            @param chave:chave da nfe
+            @param lista_chaves: lista de até 10 chaves
             @param cert: string do certificado digital A1,
             @param key: chave privada do certificado digital,
             @param versao: versão da nfe,
@@ -583,24 +583,30 @@ class nf_e(object):
             @param tipo_contingencia: habilita a contigência .
             @return: Dicionário com o envio,resposta e reason.
             """
+        if len(lista_chaves)>10:
+            raise ValueError(u'Maximo de 10 Chaves de Acesso por lote.')
+            
         p = ProcessadorNFe()
         p.versao = versao
         p.estado = estado
-        ESTADO_WS[estado] = SVAN
+        if ambiente_nacional:
+            ESTADO_WS[estado] = SVAN
         p.ambiente = ambiente
         p.certificado.cert_str = cert
         p.certificado.key_str = key
         p.tipo_contingencia = tipo_contingencia
         p.salvar_arquivos = False
-        processo = p.download_nfe_xml(cnpj, ambiente, chave_nfe=chave)
+        processo = p.download_nfes(cnpj, ambiente, lista_chaves=lista_chaves)
 
         vals = {'envio': processo.envio.xml,
                 'resposta': processo.resposta.xml,
                 'proc_xml':processo.resposta.original,
-                'status_resposta': processo.resposta.retNFe.cStat.valor,
-                'status_motivo': processo.resposta.retNFe.xMotivo.valor,
+                #'status_resposta': processo.resposta.retNFe.cStat.valor,
+                #'status_motivo': processo.resposta.retNFe.xMotivo.valor,
                 'reason': processo.resposta.reason}
-
+        for i,ret in enumerate(processo.resposta.retNFe):
+            vals['status_resp_nota_' + str(i)] = ret.cStat.valor
+            vals['status_motivo_nota_' + str(i)] = ret.xMotivo.valor
 
         return vals
 
