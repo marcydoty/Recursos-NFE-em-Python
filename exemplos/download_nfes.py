@@ -21,7 +21,7 @@ if __name__ == '__main__':
     #chave = u'35100910142785000190552000000000071946226632'
     lista_chaves = [u'35100910142785000190552000000000071946226632', u'13140311707347000195650030000004591064552496']
     
-    resultados = nova_nfe.download_notas(cnpj=cnpj, lista_chaves=lista_chaves, ambiente_nacional=True, cert=info_certificado['cert'], key=info_certificado['key'], versao=u'3.10', ambiente=2, estado=u'MG', tipo_contingencia=False)
+    resultados = nova_nfe.download_xml(cnpj=cnpj, lista_chaves=lista_chaves, ambiente_nacional=True, cert=info_certificado['cert'], key=info_certificado['key'], versao=u'3.10', ambiente=2, estado=u'MG', tipo_contingencia=False)
     
     print("\nResultado:\n")
     '''Retorna um dicionario'''
