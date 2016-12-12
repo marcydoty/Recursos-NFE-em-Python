@@ -596,7 +596,7 @@ class nf_e(object):
         p.certificado.key_str = key
         p.tipo_contingencia = tipo_contingencia
         p.salvar_arquivos = False
-        processo = p.download_nfes(cnpj, ambiente, lista_chaves=lista_chaves)
+        processo = p.download_nfe_xml(cnpj, ambiente, lista_chaves=lista_chaves)
 
         vals = {'envio': processo.envio.xml,
                 'resposta': processo.resposta.xml,
