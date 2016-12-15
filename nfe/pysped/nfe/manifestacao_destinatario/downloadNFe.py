@@ -84,9 +84,9 @@ class ProcNFeGrupoZip(XMLNFe):
 class RetNFe(XMLNFe):
     def __init__(self):
         super(RetNFe, self).__init__()
-        self.chNFe    = TagCaracter(nome=u'chNFe', codigo=u'JR08',  tamanho=[44, 44, 44], raiz=u'//retDownloadNFe/retNFe')
-        self.cStat    = TagCaracter(nome=u'cStat'    , codigo=u'JR10' , tamanho=[3, 3, 3]   , raiz=u'//retDownloadNFe/retNFe')
-        self.xMotivo  = TagCaracter(nome=u'xMotivo' , codigo=u'JR11' , tamanho=[1, 255]    , raiz=u'//retDownloadNFe/retNFe')
+        self.chNFe    = TagCaracter(nome=u'chNFe', codigo=u'JR08',  tamanho=[44, 44, 44], raiz=u'//retNFe')
+        self.cStat    = TagCaracter(nome=u'cStat'    , codigo=u'JR10' , tamanho=[3, 3, 3]   , raiz=u'//retNFe')
+        self.xMotivo  = TagCaracter(nome=u'xMotivo' , codigo=u'JR11' , tamanho=[1, 255]    , raiz=u'//retNFe')
         self.procNFeZip = TagCaracter(nome='procNFeZip', codigo='JR13', raiz='//retNFe', obrigatorio=False)
         self.schema  = TagCaracter(nome='procNFe', propriedade='schema', raiz='//retNFe', obrigatorio=False)
         self.procNFe  = TagCaracter(nome='procNFe', codigo='JR12', raiz='//retNFe', obrigatorio=False)
