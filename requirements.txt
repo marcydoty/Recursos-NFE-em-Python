@@ -1,5 +1,5 @@
 Geraldo==0.4.17
-Pillow==2.6.1
+Pillow==3.3.2
 cffi==0.8.6
 cryptography==0.6.1
 lxml==3.4.1
