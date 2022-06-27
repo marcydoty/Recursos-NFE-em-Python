@@ -5,7 +5,7 @@ cryptography==0.6.1
 lxml==3.4.1
 pyOpenSSL==17.5.0
 pycparser==2.10
-reportlab==3.1.8
+reportlab==3.5.55
 six==1.8.0
 wsgiref==0.1.2
 xmlsec==0.1.2
