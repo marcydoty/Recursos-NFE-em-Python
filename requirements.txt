@@ -1,7 +1,7 @@
 Geraldo==0.4.17
 pillow>=6.2.0
 cffi==0.8.6
-cryptography==0.6.1
+cryptography==41.0.0
 lxml==3.4.1
 pyOpenSSL==17.5.0
 pycparser==2.10
